@@ -23,11 +23,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+/**
+@file CountDownTimer.cs
+@author NDark
+
+@date 20170420 by NDark 
+. add IsActive
+. add Active()
+. add Elapsedtime()
+. add RemainingTime()
+. add NextTime
+
+*/
 using UnityEngine;
 
 public class CountDownTimer
 {
-	public float IntervalSec { get{return m_IntervalSec;} set{ m_IntervalSec = value ;} } 
+
+	public bool IsActive { get; set; }
+
+	public void Active( bool _Set )
+	{
+		this.IsActive = _Set;
+	}
 
 	public void Rewind()
 	{
@@ -39,6 +57,42 @@ public class CountDownTimer
 		return ( Time.time > m_NextTime ) ;
 	}
 
+	public float Elapsedtime( float _NowTime , bool _AlwaysNoneNegative )
+	{
+		float ret = this.IntervalSec - this.RemainingTime( _NowTime , false ) ;
+		if( true == _AlwaysNoneNegative && ret < 0.0f )
+		{
+			ret = 0.0f ;
+		}
+		return ret ; 
+	}
+
+	public float RemainingTime( float _NowTime , bool _AlwaysNoneNegative )
+	{
+		float ret = m_NextTime - _NowTime ;
+		if( true == _AlwaysNoneNegative && ret < 0.0f )
+		{
+			ret = 0.0f ;
+		}
+		return ret ; 
+	}
+
+	public float NextTime
+	{
+		get { return m_NextTime ; }
+	}
 	float m_NextTime = 0.0f ;
+
+	public float IntervalSec 
+	{ 
+		get
+		{
+			return m_IntervalSec;
+		} 
+		set
+		{ 
+			m_IntervalSec = value ;
+		} 
+	} 
 	float m_IntervalSec = float.MaxValue ;
 }
