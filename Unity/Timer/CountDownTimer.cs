@@ -34,8 +34,10 @@ SOFTWARE.
 . add RemainingTime()
 . add NextTime
 
+@date 20170422 by NDark
+. modify Rewind() and IsReady() to accept argument.
+
 */
-using UnityEngine;
 
 public class CountDownTimer
 {
@@ -47,14 +49,14 @@ public class CountDownTimer
 		this.IsActive = _Set;
 	}
 
-	public void Rewind()
+	public void Rewind( float _NowTime )
 	{
-		m_NextTime = Time.time + m_IntervalSec;
+		m_NextTime = _NowTime + m_IntervalSec;
 	}
 
-	public bool IsReady() 
+	public bool IsReady( float _NowTime ) 
 	{
-		return ( Time.time > m_NextTime ) ;
+		return ( _NowTime > m_NextTime ) ;
 	}
 
 	public float Elapsedtime( float _NowTime , bool _AlwaysNoneNegative )
