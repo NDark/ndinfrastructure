@@ -27,6 +27,7 @@ SOFTWARE.
 @file OnClickChangeScene.cs
 @author NDark
 @date 20170402 . file started.
+@date 20170425 . add class method LoadScene().
 
 */
 using UnityEngine;
@@ -35,8 +36,13 @@ public class OnClickChangeScene : MonoBehaviour
 {
 	public string m_SceneName = string.Empty ;
 
-	void OnClick()
+	public void LoadScene()
 	{
 		UnityEngine.SceneManagement.SceneManager.LoadScene ( m_SceneName );
+	}
+	
+	void OnClick()
+	{
+		LoadScene() ;
 	}
 }
