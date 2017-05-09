@@ -30,28 +30,27 @@ SOFTWARE.
 
 */
 
+#include "../../../String/Plugins/iOS/iOSStringIO.h"
+
 extern "C" 
 {
 
-
-#define MakeStringCopy( _x_ ) ( _x_ != NULL  [_x_ isKindOfClass:[NSString class]] ) ? strdup( [_x_ UTF8String] ) : NULL
-#define GetStringParam( _x_ ) ( _x_ != NULL ) ? [NSString stringWithUTF8String:_x_] : [NSString stringWithUTF8String:""]
-
-// https://forum.unity3d.com/threads/trying-to-make-my-own-copy-paste-text-plugin-for-ios-code-included-nothing-happens.117359/
+// http://stackoverflow.com/questions/18980022/building-unity-app-to-ipad
 //send clipboard to unity
 const char * _GetPasteBoardContent()
 {
     NSString *result = [UIPasteboard generalPasteboard].string;
-    return MakeStringCopy(result);
+    return StringCopy([result UTF8String]);
 }
  
 //get clipboard from unity
 void _CopyToPasteBoard(const char * eString)
 {
-    [UIPasteboard generalPasteboard].string = GetStringParam(eString);//@"the text to copy";
+    [UIPasteboard generalPasteboard].string = CToNSString(eString);//@"the text to copy";
 }
  
  
  
 }
+
 
