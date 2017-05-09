@@ -30,14 +30,13 @@ SOFTWARE.
 
 */
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static partial class PlayerSettingTools
 {
 	public static string GetBundleVersion()
 	{
-#if UNITY_STANDALONE_WIN && !UNITY_EDITOR_WIN
+#if ( UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX ) && !UNITY_EDITOR0_WIN && !UNITY_EDITOR_OSX
 		string m_WindowsRunTimeAssetPath = "version" ;
 #endif 
 // UNITY_STANDALONE_WIN
@@ -46,29 +45,35 @@ public static partial class PlayerSettingTools
 		
 		if( Application.platform == RuntimePlatform.IPhonePlayer )
 		{
-			#if UNITY_IOS
+#if UNITY_IOS
 			ret = PlayerSettingTools_iOS.GetBundleVersion() ;
-			#endif // UNITY_IOS
+#endif // UNITY_IOS
 		}
 		else if( Application.platform == RuntimePlatform.Android )
 		{
-			#if UNITY_ANDROID
-			#endif // UNITY_ANDROID	
+#if UNITY_ANDROID
+#endif // UNITY_ANDROID	
 		}
 		else if( Application.platform == RuntimePlatform.OSXEditor 
 		        || Application.platform == RuntimePlatform.WindowsEditor
 		        || Application.platform == RuntimePlatform.WindowsPlayer
 		        )
 		{
-			#if UNITY_EDITOR_WIN
+#if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
 			ret = UnityEditor.PlayerSettings.bundleVersion ;
-			#else
+#else
+#if ( UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX )
 			TextAsset ta = Resources.Load( m_AssetPath )as TextAsset;
 			if( ta )
 			{
-				ret = ta.text ;
+			ret = ta.text ;
 			}
-			#endif 
+#endif 
+// ( UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX )
+
+#endif
+// UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
+
 		}
 		else
 		{
