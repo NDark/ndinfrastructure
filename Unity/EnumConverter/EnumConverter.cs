@@ -27,6 +27,11 @@ SOFTWARE.
 @file EnumConverter.cs
 @author NDark
 @date 20170220 file started.
+
+@date 20170516 by NDark
+. add DoInitialize() at beginning of GetInteger() at EnumIntConverter
+. actual implement GetString() at EnumStrConverter
+
 */
 using UnityEngine;
 
@@ -59,6 +64,11 @@ public class EnumIntConverter<S>
 	
 	public virtual int GetInteger( S _Enum )
 	{
+		if( false == m_IsInitialized )
+		{
+			DoInitialize() ;
+		}
+		
 		int ret = 0;
 		var iEnum = m_Converter.GetEnumerator ();
 		while (iEnum.MoveNext()) 
@@ -109,7 +119,21 @@ public class EnumStrConverter<S>
 	
 	public virtual string GetString( S _Enum )
 	{
-		return _Enum.ToString() ;
+		if( false == m_IsInitialized )
+		{
+			DoInitialize() ;
+		}
+		
+		string ret = string.Empty;
+		var iEnum = m_Converter.GetEnumerator ();
+		while (iEnum.MoveNext()) 
+		{
+			if( iEnum.Current.Value.Equals( _Enum ) )
+			{
+				ret = iEnum.Current.Key ;
+			}
+		}
+		return ret;
 	}
 	
 	protected bool m_IsInitialized = false ;
