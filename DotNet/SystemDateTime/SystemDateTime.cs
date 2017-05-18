@@ -52,6 +52,13 @@ public static class SystemDateTime
 	private static System.DateTime m_Identity = new System.DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc);
 	private static System.TimeZone m_LocalTimeZone = System.TimeZone.CurrentTimeZone ; 
 
+	public static double GetSystemDateTimeSec_Local_ByNow( System.DateTime _LocalTime )
+	{
+		System.TimeSpan timeSpan = (_LocalTime - System.DateTime.Now);
+		double ret = timeSpan.TotalSeconds ;
+		return ret ;
+	}
+
 	public static double GetSystemDateTimeSec_ByNow( System.DateTime _SpecifiedTime )
 	{
 		System.DateTime timeStampUTC = m_LocalTimeZone.ToUniversalTime( _SpecifiedTime );
