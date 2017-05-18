@@ -11,13 +11,15 @@ public static class SystemDateTime
 {
 
 	// \/Date(-62135596800000)\/
+	// \/Date(1494837421000)\/
+	// \/Date(1494815636900)\/
+	// \/Date(1453789341467)\/
 	public static System.DateTime ConvertFromJSONDate( string _Str )
 	{
 		
 		const string KEY_Date = "Date" ;
 		const string KEY_LeftBrace = "(" ;
 		const string KEY_RightBrace = ")" ;
-		const string KEY_MilliSecEnding = "000" ;
 
 		if( -1 == _Str.IndexOf( KEY_Date ) )
 		{
@@ -28,11 +30,8 @@ public static class SystemDateTime
 		int index2 = _Str.IndexOf( KEY_RightBrace ) ;
 
 		string milliSecStr = _Str.Substring( index1 + 1 , index2 - index1 - 1) ;
-		string secStr = string.Empty ;
-		if( milliSecStr.EndsWith( KEY_MilliSecEnding ) )
-		{
-			secStr = milliSecStr.Substring( 0 , milliSecStr.Length - 3 ) ;
-		}
+		string secStr = milliSecStr.Substring( 0 , milliSecStr.Length - 3 ) ;
+
 
 		double sec = 0 ;
 		if( false == double.TryParse( secStr , out sec ) )
