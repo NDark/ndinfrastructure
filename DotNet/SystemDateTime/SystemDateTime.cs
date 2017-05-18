@@ -21,7 +21,7 @@ public static class SystemDateTime
 
 		if( -1 == _Str.IndexOf( KEY_Date ) )
 		{
-			return m_IdentityDateTime ;
+			return m_Identity ;
 		}
 
 		int index1 = _Str.IndexOf( KEY_LeftBrace ) ;
@@ -37,10 +37,10 @@ public static class SystemDateTime
 		double sec = 0 ;
 		if( false == double.TryParse( secStr , out sec ) )
 		{
-			return m_IdentityDateTime ;
+			return m_Identity ;
 		}
 
-		System.DateTime ret = ConvertTimeStampToSystemDateTime( (double) sec ) ;
+		System.DateTime ret = ConvertFromSec( (double) sec ) ;
 		return ret ;
 	}
 
@@ -51,7 +51,16 @@ public static class SystemDateTime
 	*/
 	private static System.DateTime m_Identity = new System.DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc);
 	private static System.TimeZone m_LocalTimeZone = System.TimeZone.CurrentTimeZone ; 
-	
+
+	public static double GetSystemDateTimeSec_ByNow( System.DateTime _SpecifiedTime )
+	{
+		System.DateTime timeStampUTC = m_LocalTimeZone.ToUniversalTime( _SpecifiedTime );
+		System.TimeSpan timeSpan = (timeStampUTC - System.DateTime.Now);
+		double ret = timeSpan.TotalSeconds ;
+		return ret ;
+	}
+
+
 	public static double GetSystemDateTimeSec( System.DateTime _SpecifiedTime )
 	{
 		System.DateTime timeStampUTC = m_LocalTimeZone.ToUniversalTime( _SpecifiedTime );
@@ -60,7 +69,7 @@ public static class SystemDateTime
 		return ret ;
 	}
 	
-	public static double GetSystemDateTimeNowSec()
+	public static double GetSystemDateTimeSecNow()
 	{
 		return GetSystemDateTimeSec( System.DateTime.Now ) ;
 	}
