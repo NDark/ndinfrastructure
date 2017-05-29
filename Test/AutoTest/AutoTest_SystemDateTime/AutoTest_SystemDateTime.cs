@@ -27,7 +27,7 @@ public class AutoTest_SystemDateTime : MonoBehaviour
 	
 	// 1474966691000 => 9/27/2016 4:58:11 PM
 	public string m_TimeStampPlus8H = string.Empty ;
-	public double m_TimeStampPlus8Sec = 0.0 ;
+	public double m_TimeStampPlus8HSec = 0.0 ;
 	
 	void Awake()
 	{
@@ -78,7 +78,7 @@ public class AutoTest_SystemDateTime : MonoBehaviour
 		
 		DateTime timeStampPlus8HUTC = localZone.ToUniversalTime( timeStampPlus8H );
 		TimeSpan timeSpanPlus8 = (timeStampPlus8HUTC - identityDateTime) ;
-		m_TimeStampPlus8Sec = timeSpanPlus8.TotalSeconds ;
+		m_TimeStampPlus8HSec = timeSpanPlus8.TotalSeconds ;
 		
 	}	
 }
