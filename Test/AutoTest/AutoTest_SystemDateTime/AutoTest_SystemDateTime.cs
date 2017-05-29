@@ -26,7 +26,7 @@ public class AutoTest_SystemDateTime : MonoBehaviour
 	public double m_TimeStamp1Sec = 0.0 ;
 	
 	// 1474966691000 => 9/27/2016 4:58:11 PM
-	public string m_TimeStamp2 = string.Empty ;
+	public string m_TimeStampPlus8H = string.Empty ;
 	public double m_TimeStampPlus8Sec = 0.0 ;
 	
 	void Awake()
@@ -72,8 +72,9 @@ public class AutoTest_SystemDateTime : MonoBehaviour
 		m_TimeStamp1Sec = timeSpan1.TotalSeconds ;
 		
 		// 1496028203 + 28800(+8Hours) = 1496057003 sec
+		// 5/29/2017 7:23:23 PM
 		System.DateTime timeStampPlus8H = identityDateTime.AddSeconds( 1496057003 ).ToLocalTime();
-		m_TimeStamp2 = timeStampPlus8H.ToString() ;
+		m_TimeStampPlus8H = timeStampPlus8H.ToString() ;
 		
 		DateTime timeStampPlus8HUTC = localZone.ToUniversalTime( timeStampPlus8H );
 		TimeSpan timeSpanPlus8 = (timeStampPlus8HUTC - identityDateTime) ;
