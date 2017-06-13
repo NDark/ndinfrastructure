@@ -8,11 +8,20 @@ namespace JSONParsersPerformance
 {
     class Program
     {
-        static string g_InputFilePath = "httpswww.mockaroo.com.json.txt" ;
+        static string g_InputFilePath1 = "httpswww.mockaroo.com.json.txt" ;
+        static string g_InputFilePath2 = "httpwww.txtwizard.netcompression.txt";
 
         static void Main(string[] args)
         {
-            System.IO.StreamReader SR = new System.IO.StreamReader(g_InputFilePath);
+            TryTest(g_InputFilePath1);
+            TryTest(g_InputFilePath2);
+
+            Console.In.Read();
+        }
+
+        static void TryTest(string _TestCaseFilePath )
+        {
+            System.IO.StreamReader SR = new System.IO.StreamReader(_TestCaseFilePath);
             if (null != SR)
             {
 
@@ -32,16 +41,13 @@ namespace JSONParsersPerformance
                         case 4: TryParseContent_SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject(content); break;
                         default: break;
                     }
-                    
+
                     watch.Stop();
-                    Console.Out.WriteLine( "Test case:" + g_InputFilePath + " Test method(" + i.ToString() + ") watch.ElapsedMilliseconds=" + watch.ElapsedMilliseconds);
+                    Console.Out.WriteLine("Test case:" + _TestCaseFilePath + " Test method(" + i.ToString() + ") watch.ElapsedMilliseconds=" + watch.ElapsedMilliseconds);
 
                 }
             }
-
-            Console.In.Read();
         }
-
 
         static void TryParseContent_SimpleJSON20121217(string _Content)
         {
@@ -69,7 +75,11 @@ namespace JSONParsersPerformance
         {
             var node = CymaticLabs.Unity3D.Amqp.SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject.JSON.Parse(_Content);
         }
+        static void TryParseContent_NewtonJSON_9_0_1(string _Content)
+        {
+           //  var node =  Newtonsoft.Json.JsonConvert.DeserializeObject(_Content);
+        }
 
-        
+
     }
 }
