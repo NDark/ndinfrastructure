@@ -45,6 +45,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleJSON_20121217.cs" />
+    <Compile Include="SimpleJSON_20121217_StringBuilderEscape.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

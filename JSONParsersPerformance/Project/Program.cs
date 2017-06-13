@@ -17,7 +17,7 @@ namespace JSONParsersPerformance
             {
 
                 string content = SR.ReadToEnd();
-                int testCount = 1;
+                int testCount = 2;
                 for (int i = 0; i < testCount; ++i)
                 {
                     var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -25,6 +25,7 @@ namespace JSONParsersPerformance
                     switch (i)
                     {
                         case 0: TryParseContent_SimpleJSON20121217(content); break;
+                        case 1: TryParseContent_SimpleJSON20121217_StringBuilderEscape(content); break;
                     }
                     
                     watch.Stop();
@@ -40,6 +41,12 @@ namespace JSONParsersPerformance
         static void TryParseContent_SimpleJSON20121217(string _Content)
         {
             var node = SimpleJSON_20121217.JSON.Parse(_Content);
+        }
+
+
+        static void TryParseContent_SimpleJSON20121217_StringBuilderEscape(string _Content)
+        {
+            var node = SimpleJSON_20121217_StringBuilderEscape.JSON.Parse(_Content);
         }
     }
 }
