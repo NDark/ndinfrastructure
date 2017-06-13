@@ -17,7 +17,7 @@ namespace JSONParsersPerformance
             {
 
                 string content = SR.ReadToEnd();
-                int testCount = 3;
+                int testCount = 4;
 
                 for (int i = 0; i < testCount; ++i)
                 {
@@ -28,10 +28,12 @@ namespace JSONParsersPerformance
                         case 0: TryParseContent_SimpleJSON20121217(content); break;
                         case 1: TryParseContent_SimpleJSON20121217_StringBuilderEscape(content); break;
                         case 2: TryParseContent_SimpleJSON_20121217_StringBuilderEscapeToken(content); break;
+                        case 3: TryParseContent_SimpleJSON_20140921_StringBuilderEscapeTokenNumberize(content); break;
+                        default: break;
                     }
                     
                     watch.Stop();
-                    Console.Out.WriteLine( "(" + i.ToString() + ") watch.ElapsedMilliseconds=" + watch.ElapsedMilliseconds);
+                    Console.Out.WriteLine( "Test case:" + g_InputFilePath + " Test method(" + i.ToString() + ") watch.ElapsedMilliseconds=" + watch.ElapsedMilliseconds);
 
                 }
             }
@@ -55,6 +57,12 @@ namespace JSONParsersPerformance
         static void TryParseContent_SimpleJSON_20121217_StringBuilderEscapeToken(string _Content)
         {
             var node = SimpleJSON_20121217_StringBuilderEscapeToken.JSON.Parse(_Content);
+        }
+
+
+        static void TryParseContent_SimpleJSON_20140921_StringBuilderEscapeTokenNumberize(string _Content)
+        {
+            var node = SimpleJSON_20140921_StringBuilderEscapeTokenNumberize.JSON.Parse(_Content);
         }
     }
 }
