@@ -63,6 +63,7 @@
     <Compile Include="SimpleJSON_20121217_StringBuilderEscape.cs" />
     <Compile Include="SimpleJSON_20121217_StringBuilderEscapeToken.cs" />
     <Compile Include="SimpleJSON_20140921_StringBuilderEscapeTokenNumberize.cs" />
+    <Compile Include="SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

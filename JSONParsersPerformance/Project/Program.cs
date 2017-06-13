@@ -17,7 +17,7 @@ namespace JSONParsersPerformance
             {
 
                 string content = SR.ReadToEnd();
-                int testCount = 4;
+                int testCount = 5;
 
                 for (int i = 0; i < testCount; ++i)
                 {
@@ -29,6 +29,7 @@ namespace JSONParsersPerformance
                         case 1: TryParseContent_SimpleJSON20121217_StringBuilderEscape(content); break;
                         case 2: TryParseContent_SimpleJSON_20121217_StringBuilderEscapeToken(content); break;
                         case 3: TryParseContent_SimpleJSON_20140921_StringBuilderEscapeTokenNumberize(content); break;
+                        case 4: TryParseContent_SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject(content); break;
                         default: break;
                     }
                     
@@ -64,5 +65,11 @@ namespace JSONParsersPerformance
         {
             var node = SimpleJSON_20140921_StringBuilderEscapeTokenNumberize.JSON.Parse(_Content);
         }
+        static void TryParseContent_SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject(string _Content)
+        {
+            var node = CymaticLabs.Unity3D.Amqp.SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject.JSON.Parse(_Content);
+        }
+
+        
     }
 }
