@@ -47,6 +47,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json1002">
+      <HintPath>..\..\..\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json1002.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json608">
+      <HintPath>..\..\..\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json608.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json901">
+      <HintPath>..\..\..\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json901.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -67,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="httpswww.mockaroo.com.json.txt">

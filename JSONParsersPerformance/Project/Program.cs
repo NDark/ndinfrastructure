@@ -26,7 +26,7 @@ namespace JSONParsersPerformance
             {
 
                 string content = SR.ReadToEnd();
-                int testCount = 5;
+                int testCount = 8;
 
                 for (int i = 0; i < testCount; ++i)
                 {
@@ -39,6 +39,9 @@ namespace JSONParsersPerformance
                         case 2: TryParseContent_SimpleJSON_20121217_StringBuilderEscapeToken(content); break;
                         case 3: TryParseContent_SimpleJSON_20140921_StringBuilderEscapeTokenNumberize(content); break;
                         case 4: TryParseContent_SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject(content); break;
+                        case 5: TryParseContent_NewtonJSON_6_0_8(content); break;
+                        case 6: TryParseContent_NewtonJSON_9_0_1(content); break;
+                        case 7: TryParseContent_NewtonJSON_10_0_2(content); break;
                         default: break;
                     }
 
@@ -75,11 +78,17 @@ namespace JSONParsersPerformance
         {
             var node = CymaticLabs.Unity3D.Amqp.SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject.JSON.Parse(_Content);
         }
+        static void TryParseContent_NewtonJSON_6_0_8(string _Content)
+        {
+            var node =  Newtonsoft.Json608.JsonConvert.DeserializeObject(_Content);
+        }
         static void TryParseContent_NewtonJSON_9_0_1(string _Content)
         {
-           //  var node =  Newtonsoft.Json.JsonConvert.DeserializeObject(_Content);
+            var node = Newtonsoft.Json901.JsonConvert.DeserializeObject(_Content);
         }
-
-
+        static void TryParseContent_NewtonJSON_10_0_2(string _Content)
+        {
+            var node = Newtonsoft.Json1002.JsonConvert.DeserializeObject(_Content);
+        }
     }
 }
