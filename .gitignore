@@ -1,1 +1,6 @@
 *.meta
+/JSONParsersPerformance/Project/obj
+/JSONParsersPerformance/Project/.vs
+/JSONParsersPerformance/Project/bin
+/JSONParsersPerformance/BIN/*.config
+/JSONParsersPerformance/BIN/*.pdb
