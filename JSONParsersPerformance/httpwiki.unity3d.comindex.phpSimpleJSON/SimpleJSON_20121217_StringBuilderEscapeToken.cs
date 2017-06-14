@@ -42,6 +42,9 @@
  *   It's not the most efficient way but for a moderate amount of data it should work on all platforms.
  * 
  * * * * */
+
+#define QUOTE_STRING
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -50,6 +53,26 @@ using System.Linq;
  
 namespace SimpleJSON_20121217_StringBuilderEscapeToken
 {
+
+#if QUOTE_STRING
+	public enum StringOrOther
+	{
+		String = 0
+		, Other 
+	}
+#endif
+// QUOTE_STRING
+
+	public class SystemTextStringBuilderUtility
+	{
+		public static void ZeroStringBuilder( System.Text.StringBuilder _SBuilder )
+		{
+			_SBuilder.Length = 0 ;
+			_SBuilder.Capacity = 0 ;
+		}
+	}
+
+
     public enum JSONBinaryTag
     {
         Array            = 1,
@@ -60,25 +83,38 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
         BoolValue        = 6,
         FloatValue        = 7,
     }
-    
-	public class System_Text_StringBuilder
-	{
-	    public static void ClearStringBuilder( System.Text.StringBuilder _SB )
-	    {
-	    	_SB.Length = 0 ;
-	    	_SB.Capacity = 0 ;
-	    }
-	}
+
 	
     public class JSONNode
     {
+    
+#if QUOTE_STRING
+		public StringOrOther IsStringOrOther 
+		{
+			set 
+			{
+				m_IsStringOrOther = value ;
+			}
+			get
+			{
+				return m_IsStringOrOther ;
+			}
+		}
+		private StringOrOther m_IsStringOrOther = StringOrOther.Other ;
+#endif
+// QUOTE_STRING
+		
+		
         #region common interface
         public virtual void Add(string aKey, JSONNode aItem){ }
         public virtual JSONNode this[int aIndex]   { get { return null; } set { } }
-		public virtual bool IsContainsKey( string aKey )
+
+        // 
+		public virtual bool IsContains( string aKey )
 		{
 			return false ;
 		}        
+		// 
         public virtual JSONNode this[string aKey]  { get { return null; } set { } }
         public virtual string Value                { get { return "";   } set { } }
         public virtual int Count                   { get { return 0;    } }
@@ -190,6 +226,14 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
         #endregion typecasting properties
  
         #region operators
+		public static implicit operator JSONNode( float _Float )
+		{
+			return new JSONData(_Float);
+		}
+		public static implicit operator JSONNode(int _Int )
+		{
+			return new JSONData(_Int);
+		}
         public static implicit operator JSONNode(string s)
         {
             return new JSONData(s);
@@ -223,28 +267,23 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
  
         internal static string Escape(string aText)
         {
-        	/**
-        	20160113 by NDark . when size aText large to some scale (ex. 260000 length long).
-        	This function will cause performance issue, 
-        	therefore, we replace string operation by StringBuilder.
-        	It reduce the costing time from 5 secs to less 1 sec
-        	*/
-			System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+			System.Text.StringBuilder sbuilder = new System.Text.StringBuilder();
             foreach(char c in aText)
             {
                 switch(c)
                 {
-                    case '\\' : sb.Append( "\\\\") ; break;
-                    case '\"' : sb.Append( "\\\"") ; break;
-                    case '\n' : sb.Append( "\\n" ) ; break;
-                    case '\r' : sb.Append( "\\r" ) ; break;
-                    case '\t' : sb.Append( "\\t" ) ; break;
-                    case '\b' : sb.Append( "\\b" ) ; break;
-                    case '\f' : sb.Append( "\\f" ) ; break;
-                    default   : sb.Append( c     ) ; break;
+				case '\\' : sbuilder.Append( "\\\\") ; break;
+				case '\"' : sbuilder.Append( "\\\"") ; break;
+				case '\n' : sbuilder.Append( "\\n" ) ; break;
+				case '\r' : sbuilder.Append( "\\r" ) ; break;
+				case '\t' : sbuilder.Append( "\\t" ) ; break;
+				case '\b' : sbuilder.Append( "\\b" ) ; break;
+				case '\f' : sbuilder.Append( "\\f" ) ; break;
+				default   : sbuilder.Append( c     ) ; break;
                 }
             }
-			return sb.ToString();
+			return sbuilder.ToString();
         }
  
         public static JSONNode Parse(string aJSON)
@@ -253,24 +292,25 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
             JSONNode ctx = null;
             int i = 0;
             
-			/**
-        	20161101 by NDark . Replace the type of Token from string to System.Text.StringBuilder
-        	like we did at this method "internal static string Escape(string aText)"
-        	in order to fix the performance issue when SimpleJSON handle string longer than 240000 length.
-        	( performance inmprovement 80 secs -> 15 millisec)
-        	*/
-			System.Text.StringBuilder Token = new System.Text.StringBuilder() ;
+			System.Text.StringBuilder tokenSB = new System.Text.StringBuilder() ;
             
             string TokenName = "";
             bool QuoteMode = false;
-            while (i < aJSON.Length)
+			
+#if QUOTE_STRING
+			int quoteNumber = 0 ;
+#endif
+// QUOTE_STRING
+
+			
+			while (i < aJSON.Length)
             {
                 switch (aJSON[i])
                 {
                     case '{':
                         if (QuoteMode)
                         {
-                            Token.Append( aJSON[i] );
+							tokenSB.Append( aJSON[i] );
                             break;
                         }
                         stack.Push(new JSONClass());
@@ -284,7 +324,7 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
                         }
                         TokenName = "";
                         
-                        System_Text_StringBuilder.ClearStringBuilder( Token ) ;
+						SystemTextStringBuilderUtility.ZeroStringBuilder( tokenSB ) ;
                         
                         ctx = stack.Peek();
                     break;
@@ -292,7 +332,7 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
                     case '[':
                         if (QuoteMode)
                         {
-							Token.Append( aJSON[i] ) ;
+							tokenSB.Append( aJSON[i] ) ;
                             break;
                         }
  
@@ -307,7 +347,7 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
                         }
                         TokenName = "";
                         
-						System_Text_StringBuilder.ClearStringBuilder( Token ) ;
+						SystemTextStringBuilderUtility.ZeroStringBuilder( tokenSB ) ;
 					
                         ctx = stack.Peek();
                     break;
@@ -316,24 +356,50 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
                     case ']':
                         if (QuoteMode)
                         {
-							Token.Append( aJSON[i] );
+							tokenSB.Append( aJSON[i] );
                             break;
                         }
                         if (stack.Count == 0)
                             throw new Exception("JSON Parse: Too many closing brackets");
  
                         stack.Pop();
-                        if (Token.ToString() != "")
+						if (tokenSB.ToString() != "")
                         {
-                            TokenName = TokenName.Trim();
+							// UnityEngine.Debug.Log("quoteNumber=" + quoteNumber );
+							TokenName = TokenName.Trim();
                             if (ctx is JSONArray)
-								ctx.Add(Token.ToString() );
+                            {
+								#if QUOTE_STRING
+								JSONNode node = ( tokenSB.ToString() ) ;
+								node.IsStringOrOther = ( quoteNumber > 0 ) ? StringOrOther.String : StringOrOther.Other ;
+								ctx.Add(node);
+								quoteNumber = 0 ;
+								#else
+								// QUOTE_STRING                            
+								ctx.Add( Token.ToString() );
+								#endif
+								// QUOTE_STRING
+								
+                            }
                             else if (TokenName != "")
-                                ctx.Add(TokenName, Token.ToString() );
+                            {
+								#if QUOTE_STRING
+								JSONNode node = ( tokenSB.ToString() ) ;
+								node.IsStringOrOther = ( quoteNumber > 0 ) ? StringOrOther.String : StringOrOther.Other ;
+								ctx.Add(TokenName, node);
+								quoteNumber = 0 ;
+								#else
+								// QUOTE_STRING                            
+								ctx.Add(TokenName, Token.ToString() );
+								#endif
+								// QUOTE_STRING
+								                            
+                                
+                            }
                         }
                         TokenName = "";
                         
-						System_Text_StringBuilder.ClearStringBuilder( Token ) ;
+						SystemTextStringBuilderUtility.ZeroStringBuilder( tokenSB ) ;
                         
                         if (stack.Count>0)
                             ctx = stack.Peek();
@@ -342,35 +408,69 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
                     case ':':
                         if (QuoteMode)
                         {
-							Token.Append( aJSON[i] );
+							tokenSB.Append( aJSON[i] );
                             break;
                         }
-						TokenName = Token.ToString();
+#if QUOTE_STRING                        
+						quoteNumber = 0 ;
+#endif
+// QUOTE_STRING						
+						TokenName = tokenSB.ToString();
 						
-						System_Text_StringBuilder.ClearStringBuilder( Token ) ;
+						SystemTextStringBuilderUtility.ZeroStringBuilder( tokenSB ) ;
 						
                     break;
  
                     case '"':
+#if QUOTE_STRING
+					++quoteNumber ;
+#endif
+// QUOTE_STRING
                         QuoteMode ^= true;
                     break;
  
                     case ',':
                         if (QuoteMode)
                         {
-							Token.Append( aJSON[i] );
+							tokenSB.Append( aJSON[i] );
                             break;
                         }
-                        if (Token.ToString() != "")
+						if (tokenSB.ToString() != "")
                         {
-                            if (ctx is JSONArray)
-								ctx.Add(Token.ToString());
+							// UnityEngine.Debug.Log("quoteNumber=" + quoteNumber );
+							if (ctx is JSONArray)
+                            {
+								#if QUOTE_STRING
+								JSONNode node = ( tokenSB.ToString() ) ;
+								node.IsStringOrOther = ( quoteNumber > 0 ) ? StringOrOther.String : StringOrOther.Other ;
+								ctx.Add(node);
+								quoteNumber = 0 ;
+								#else
+								// QUOTE_STRING                            
+								ctx.Add( Token.ToString() );
+								#endif
+								// QUOTE_STRING
+								
+                                
+                            }
                             else if (TokenName != "")
-                                ctx.Add(TokenName, Token.ToString() );
+                            {
+								#if QUOTE_STRING
+								JSONNode node = ( tokenSB.ToString() ) ;
+								node.IsStringOrOther = ( quoteNumber > 0 ) ? StringOrOther.String : StringOrOther.Other ;
+								ctx.Add(TokenName, node);
+								quoteNumber = 0 ;
+								#else
+								// QUOTE_STRING                            
+								ctx.Add(TokenName, Token.ToString() );
+								#endif
+								// QUOTE_STRING
+
+                            }
                         }
                         TokenName = "";
                         
-						System_Text_StringBuilder.ClearStringBuilder( Token ) ;
+						SystemTextStringBuilderUtility.ZeroStringBuilder( tokenSB ) ;
 						
                     break;
  
@@ -382,7 +482,7 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
                     case '\t':
                         if (QuoteMode)
 						{
-							Token.Append( aJSON[i] ) ;
+							tokenSB.Append( aJSON[i] ) ;
 						}
                     break;
  
@@ -393,27 +493,27 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
                             char C = aJSON[i];
                             switch (C)
                             {
-								case 't' : Token.Append( '\t' ); break;
-								case 'r' : Token .Append( '\r'); break;
-								case 'n' : Token.Append( '\n'); break;
-								case 'b' : Token.Append( '\b'); break;
-								case 'f' : Token.Append( '\f'); break;
-                                case 'u':
+							case 't' : tokenSB.Append( '\t' ); break;
+							case 'r' : tokenSB.Append( '\r'); break;
+							case 'n' : tokenSB.Append( '\n'); break;
+							case 'b' : tokenSB.Append( '\b'); break;
+							case 'f' : tokenSB.Append( '\f'); break;
+                            case 'u':
                                 {
                                     string s = aJSON.Substring(i+1,4);
-									Token.Append( 
+									tokenSB.Append( 
 									(char)int.Parse(s, System.Globalization.NumberStyles.AllowHexSpecifier) 
 									);
                                     i += 4;
                                     break;
                                 }
-							default  : Token.Append( C ) ; break;
+							default  : tokenSB.Append( C ) ; break;
                             }
                         }
                     break;
  
                     default:
-						Token.Append( aJSON[i] ) ;
+						tokenSB.Append( aJSON[i] ) ;
                     break;
                 }
                 ++i;
@@ -640,7 +740,6 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
                     m_List[aIndex] = value;
             }
         }
-        
         public override JSONNode this[string aKey]
         {
             get{ return new JSONLazyCreator(this);}
@@ -719,10 +818,12 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
     public class JSONClass : JSONNode, IEnumerable
     {
         private Dictionary<string,JSONNode> m_Dict = new Dictionary<string,JSONNode>();
-		public override bool IsContainsKey( string aKey )
+        // 
+		public override bool IsContains( string aKey )
 		{
 			return m_Dict.ContainsKey(aKey) ;
 		}
+		// 
         public override JSONNode this[string aKey]
         {
             get
@@ -866,6 +967,7 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
         }
         public JSONData(string aData)
         {
+			IsStringOrOther = StringOrOther.String ;
             m_Data = aData;
         }
         public JSONData(float aData)
@@ -887,7 +989,21 @@ namespace SimpleJSON_20121217_StringBuilderEscapeToken
  
         public override string ToString()
         {
-            return "\"" + Escape(m_Data) + "\"";
+			#if QUOTE_STRING
+			if( this.IsStringOrOther == StringOrOther.String )
+			{
+				return "\"" + Escape(m_Data) + "\"";
+			}
+			else
+			{
+				return Escape(m_Data) ;
+			}
+			#else
+			// QUOTE_STRING                            
+			return "\"" + Escape(m_Data) + "\"";
+			#endif
+			// QUOTE_STRING
+			
         }
         public override string ToString(string aPrefix)
         {
