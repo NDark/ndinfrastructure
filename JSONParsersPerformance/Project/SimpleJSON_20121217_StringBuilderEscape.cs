@@ -214,28 +214,23 @@ namespace SimpleJSON_20121217_StringBuilderEscape
  
         internal static string Escape(string aText)
         {
-        	/**
-        	20160113 by NDark . when size aText large to some scale (ex. 260000 length long).
-        	This function will cause performance issue, 
-        	therefore, we replace string operation by StringBuilder.
-        	It reduce the costing time from 5 secs to less 1 sec
-        	*/
-			System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+			System.Text.StringBuilder sbuilder = new System.Text.StringBuilder();
             foreach(char c in aText)
             {
                 switch(c)
                 {
-                    case '\\' : sb.Append( "\\\\") ; break;
-                    case '\"' : sb.Append( "\\\"") ; break;
-                    case '\n' : sb.Append( "\\n" ) ; break;
-                    case '\r' : sb.Append( "\\r" ) ; break;
-                    case '\t' : sb.Append( "\\t" ) ; break;
-                    case '\b' : sb.Append( "\\b" ) ; break;
-                    case '\f' : sb.Append( "\\f" ) ; break;
-                    default   : sb.Append( c     ) ; break;
+				case '\\' : sbuilder.Append( "\\\\") ; break;
+				case '\"' : sbuilder.Append( "\\\"") ; break;
+				case '\n' : sbuilder.Append( "\\n" ) ; break;
+				case '\r' : sbuilder.Append( "\\r" ) ; break;
+				case '\t' : sbuilder.Append( "\\t" ) ; break;
+				case '\b' : sbuilder.Append( "\\b" ) ; break;
+				case '\f' : sbuilder.Append( "\\f" ) ; break;
+				default   : sbuilder.Append( c     ) ; break;
                 }
             }
-			return sb.ToString();
+			return sbuilder.ToString();
         }
  
         public static JSONNode Parse(string aJSON)
