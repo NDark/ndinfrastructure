@@ -26,7 +26,7 @@ namespace JSONParsersPerformance
             {
 
                 string content = SR.ReadToEnd();
-                int testCount = 12;
+                int testCount = 13;
 
                 for (int i = 0; i < testCount; ++i)
                 {
@@ -37,15 +37,16 @@ namespace JSONParsersPerformance
                         case 0: TryParseContent_SimpleJSON20121217(content); break;
                         case 1: TryParseContent_SimpleJSON20121217_StringBuilderEscape(content); break;
                         case 2: TryParseContent_SimpleJSON_20121217_StringBuilderEscapeToken(content); break;
-                        case 3: TryParseContent_SimpleJSON_20140921_StringBuilderEscapeTokenNumberize(content); break;
-                        case 4: TryParseContent_SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject(content); break;
-                        case 5: TryParseContent_SimpleJSON_20170411_JSONTextModeToString(content); break;
-                        case 6: TryParseContent_NewtonJSON_6_0_8(content); break;
-                        case 7: TryParseContent_NewtonJSON_9_0_1(content); break;
-                        case 8: TryParseContent_NewtonJSON_10_0_2(content); break;
-                        case 9: TryParseContent_SimpleJson0360(content); break;
-                        case 10: TryParseContent_LightJson022(content); break;
-                        case 11: TryParseContent_fastJSON2124(content); break;
+                        case 3: TryParseContent_SimpleJSON_20121217_StringBuilderEscapeTokenCapacity(content); break;
+                        case 4: TryParseContent_SimpleJSON_20140921_StringBuilderEscapeTokenNumberize(content); break;
+                        case 5: TryParseContent_SimpleJSON_20170308_StringBuilderEscapeTokenJSONObject(content); break;
+                        case 6: TryParseContent_SimpleJSON_20170411_JSONTextModeToString(content); break;
+                        case 7: TryParseContent_NewtonJSON_6_0_8(content); break;
+                        case 8: TryParseContent_NewtonJSON_9_0_1(content); break;
+                        case 9: TryParseContent_NewtonJSON_10_0_2(content); break;
+                        case 10: TryParseContent_SimpleJson0360(content); break;
+                        case 11: TryParseContent_LightJson022(content); break;
+                        case 12: TryParseContent_fastJSON2124(content); break;
                             
                         default: break;
                     }
@@ -87,7 +88,11 @@ namespace JSONParsersPerformance
         {
             var node = SimpleJSON_20170411_JSONTextModeToString.JSON.Parse(_Content);
         }
-
+        static void TryParseContent_SimpleJSON_20121217_StringBuilderEscapeTokenCapacity(string _Content)
+        {
+            var node = SimpleJSON_20121217_StringBuilderEscapeTokenCapacity.JSON.Parse(_Content);
+        }
+        
         static void TryParseContent_NewtonJSON_6_0_8(string _Content)
         {
             var node =  Newtonsoft.Json608.JsonConvert.DeserializeObject(_Content);
