@@ -47,6 +47,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="fastJSON2124">
+      <HintPath>..\..\..\fastJSON\fastJSON\bin\Release\fastJSON2124.dll</HintPath>
+    </Reference>
     <Reference Include="LightJson022">
       <HintPath>..\..\..\LightJson\Sources\LightJson\bin\Release\LightJson022.dll</HintPath>
     </Reference>

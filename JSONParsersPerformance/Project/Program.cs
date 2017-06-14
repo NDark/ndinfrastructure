@@ -26,7 +26,7 @@ namespace JSONParsersPerformance
             {
 
                 string content = SR.ReadToEnd();
-                int testCount = 11;
+                int testCount = 12;
 
                 for (int i = 0; i < testCount; ++i)
                 {
@@ -45,6 +45,7 @@ namespace JSONParsersPerformance
                         case 8: TryParseContent_NewtonJSON_10_0_2(content); break;
                         case 9: TryParseContent_SimpleJson0360(content); break;
                         case 10: TryParseContent_LightJson022(content); break;
+                        case 11: TryParseContent_fastJSON2124(content); break;
                             
                         default: break;
                     }
@@ -108,5 +109,11 @@ namespace JSONParsersPerformance
         {
             var node = LightJson022.Serialization.JsonReader.Parse(_Content);
         }
+
+        static void TryParseContent_fastJSON2124(string _Content)
+        {
+            var node = fastJSON2124.JSON.Parse(_Content);
+        }
+        
     }
 }
