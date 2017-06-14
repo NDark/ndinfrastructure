@@ -53,8 +53,9 @@
     <Reference Include="LightJson022">
       <HintPath>..\..\..\LightJson\Sources\LightJson\bin\Release\LightJson022.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json1002">
-      <HintPath>..\..\..\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json1002.dll</HintPath>
+    <Reference Include="Newtonsoft.Json1002, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BIN\Newtonsoft.Json1002.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json608">
       <HintPath>..\..\..\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json608.dll</HintPath>
