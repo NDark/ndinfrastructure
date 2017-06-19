@@ -1,0 +1,2 @@
+key	version	fetchType	releaseType
+scene_main	1	Main0	UnloadByDemand

@@ -1,1 +1,6 @@
 *.meta
+/CSVToJSON/BIN/*.config
+/CSVToJSON/BIN/*.pdb
+/CSVToJSON/CSVToJSON/bin
+/CSVToJSON/CSVToJSON/obj
+/CSVToJSON/.vs
