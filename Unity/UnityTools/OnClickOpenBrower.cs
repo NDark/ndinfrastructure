@@ -50,6 +50,22 @@ public class OnClickOpenBrower : MonoBehaviour
 			Application.OpenURL( m_Url ) ;
 		}
 	}
+
+	public void RefreshBrower()
+	{
+		// Debug.Log( Application.platform ) ;
+		if( Application.platform == RuntimePlatform.WebGLPlayer )
+		{
+			string url = "window.open('" + m_Url + "')" ;
+			// Debug.Log( url ) ;
+			Application.ExternalEval( url );
+		}
+		else /*if( Application.platform == RuntimePlatform.WindowsPlayer ||
+				 Application.platform == RuntimePlatform.WindowsEditor )*/
+		{
+			Application.OpenURL( m_Url ) ;
+		}
+	}
 	
 	void OnClick()
 	{
