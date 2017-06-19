@@ -37,26 +37,23 @@ public class OnClickOpenBrower : MonoBehaviour
 
 	public void OpenBrower()
 	{
-		// Debug.Log( Application.platform ) ;
-		if( Application.platform == RuntimePlatform.WebGLPlayer )
-		{
-			string url = "window.open('" + m_Url + "','aNewWindow')" ;
-			// Debug.Log( url ) ;
-			Application.ExternalEval( url );
-		}
-		else /*if( Application.platform == RuntimePlatform.WindowsPlayer ||
-				 Application.platform == RuntimePlatform.WindowsEditor )*/
-		{
-			Application.OpenURL( m_Url ) ;
-		}
+		_OpenBrower( true ) ;
 	}
 
 	public void RefreshBrower()
 	{
+		_OpenBrower( false ) ;
+	}
+
+	void _OpenBrower( bool _NewWindow )
+	{
 		// Debug.Log( Application.platform ) ;
 		if( Application.platform == RuntimePlatform.WebGLPlayer )
 		{
-			string url = "window.open('" + m_Url + "')" ;
+			string url = (true == _NewWindow ) ? 
+				"window.open('" + m_Url + "','aNewWindow')"
+				: "window.open('" + m_Url + "','_self')" ;
+			
 			// Debug.Log( url ) ;
 			Application.ExternalEval( url );
 		}
