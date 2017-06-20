@@ -27,6 +27,8 @@ SOFTWARE.
 @file OnClickOpenBrower.cs
 @author NDark
 @date 20170501 . file started.
+@date 20170620 by NDark
+. add class method OpenBrowerWithSpecifiedTabName(), OpenBrowerNewTab(), OpenBrowerAtSelf(), RefreshBrower()
 
 */
 using UnityEngine;
@@ -37,25 +39,38 @@ public class OnClickOpenBrower : MonoBehaviour
 
 	public void OpenBrower()
 	{
-		_OpenBrower( true ) ;
+		OpenBrowerWithSpecifiedTabName() ;// aNewWindow
 	}
 
 	public void RefreshBrower()
 	{
-		_OpenBrower( false ) ;
+		_OpenBrower( GetRefreshBrowserJSString() ) ;
 	}
 
-	void _OpenBrower( bool _NewWindow )
+	public void OpenBrowerNewTab()
+	{
+		_OpenBrower( GenerateOpenBrowserJSString( "_blank" ) ) ;
+	}
+
+	public void OpenBrowerAtSelf()
+	{
+		_OpenBrower( GenerateOpenBrowserJSString( "_self" ) ) ;
+	}
+
+	public void OpenBrowerWithSpecifiedTabName( string _WindowName = "aNewWindow" )
+	{
+		_OpenBrower( GenerateOpenBrowserJSString( _WindowName ) ) ;
+	}
+
+
+	// _CustomKey _blank , _self , or other specified window name(will use the same name to open the same tab).
+	void _OpenBrower( string _JSCall )
 	{
 		// Debug.Log( Application.platform ) ;
 		if( Application.platform == RuntimePlatform.WebGLPlayer )
 		{
-			string url = (true == _NewWindow ) ? 
-				"window.open('" + m_Url + "','aNewWindow')"
-				: "window.open('" + m_Url + "','_self')" ;
-			
-			// Debug.Log( url ) ;
-			Application.ExternalEval( url );
+			// Debug.Log( jsCall ) ;
+			Application.ExternalEval( _JSCall );
 		}
 		else /*if( Application.platform == RuntimePlatform.WindowsPlayer ||
 				 Application.platform == RuntimePlatform.WindowsEditor )*/
@@ -68,4 +83,15 @@ public class OnClickOpenBrower : MonoBehaviour
 	{
 		OpenBrower() ;
 	}
+
+	string GenerateOpenBrowserJSString( string _CustomKey )
+	{
+		return "window.open('" + m_Url + "','"+_CustomKey+"')" ;
+	}
+
+	string GetRefreshBrowserJSString()
+	{
+		return "document.location.reload(true)" ;
+	}
+
 }
