@@ -1,0 +1,5 @@
+﻿Class:DataClass
+Protocol:DataController
+int a
+string b
+float c
