@@ -2,3 +2,6 @@
 /ClassGen/Project/obj
 /ClassGen/Project/.vs
 /ClassGen/Project/bin
+/ClassGen/BIN/*.config
+/ClassGen/BIN/*.pdb
+/ClassGen/Project/*.user
