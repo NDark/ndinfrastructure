@@ -68,7 +68,6 @@ namespace SimpleJSON
 		public static void ZeroStringBuilder( System.Text.StringBuilder _SBuilder )
 		{
 			_SBuilder.Length = 0 ;
-			_SBuilder.Capacity = 0 ;
 		}
 	}
 
