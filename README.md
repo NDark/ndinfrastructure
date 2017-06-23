@@ -52,3 +52,13 @@
 1. 11: TryParseContent_LightJson022(content);
 1. 12: TryParseContent_fastJSON2124(content);
 
+
+# References
+
+1. http://wiki.unity3d.com/index.php/SimpleJSON
+1. https://github.com/opless/SimpleJSON
+1. https://github.com/CymaticLabs/Unity3D.Amqp
+1. http://www.newtonsoft.com/json
+1. https://www.nuget.org/packages/SimpleJson/
+1. https://github.com/MarcosLopezC/LightJson
+1. https://github.com/alibaba/fastjson
