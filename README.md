@@ -2,32 +2,32 @@
 
 ## Test Result 
 
-Test case:httpswww.mockaroo.com.json.txt Test method(0) watch.ElapsedMilliseconds=9
-Test case:httpswww.mockaroo.com.json.txt Test method(1) watch.ElapsedMilliseconds=10
-Test case:httpswww.mockaroo.com.json.txt Test method(2) watch.ElapsedMilliseconds=1119
-Test case:httpswww.mockaroo.com.json.txt Test method(3) watch.ElapsedMilliseconds=3
-Test case:httpswww.mockaroo.com.json.txt Test method(4) watch.ElapsedMilliseconds=5
-Test case:httpswww.mockaroo.com.json.txt Test method(5) watch.ElapsedMilliseconds=4
-Test case:httpswww.mockaroo.com.json.txt Test method(6) watch.ElapsedMilliseconds=4
-Test case:httpswww.mockaroo.com.json.txt Test method(7) watch.ElapsedMilliseconds=46
-Test case:httpswww.mockaroo.com.json.txt Test method(8) watch.ElapsedMilliseconds=43
-Test case:httpswww.mockaroo.com.json.txt Test method(9) watch.ElapsedMilliseconds=46
-Test case:httpswww.mockaroo.com.json.txt Test method(10) watch.ElapsedMilliseconds=11
-Test case:httpswww.mockaroo.com.json.txt Test method(11) watch.ElapsedMilliseconds=14
-Test case:httpswww.mockaroo.com.json.txt Test method(12) watch.ElapsedMilliseconds=3
-Test case:httpwww.txtwizard.netcompression.txt Test method(0) watch.ElapsedMilliseconds=2195
-Test case:httpwww.txtwizard.netcompression.txt Test method(1) watch.ElapsedMilliseconds=2249
-Test case:httpwww.txtwizard.netcompression.txt Test method(2) watch.ElapsedMilliseconds=1
-Test case:httpwww.txtwizard.netcompression.txt Test method(3) watch.ElapsedMilliseconds=1
-Test case:httpwww.txtwizard.netcompression.txt Test method(4) watch.ElapsedMilliseconds=1
-Test case:httpwww.txtwizard.netcompression.txt Test method(5) watch.ElapsedMilliseconds=1
-Test case:httpwww.txtwizard.netcompression.txt Test method(6) watch.ElapsedMilliseconds=1
-Test case:httpwww.txtwizard.netcompression.txt Test method(7) watch.ElapsedMilliseconds=0
-Test case:httpwww.txtwizard.netcompression.txt Test method(8) watch.ElapsedMilliseconds=0
-Test case:httpwww.txtwizard.netcompression.txt Test method(9) watch.ElapsedMilliseconds=0
-Test case:httpwww.txtwizard.netcompression.txt Test method(10) watch.ElapsedMilliseconds=0
-Test case:httpwww.txtwizard.netcompression.txt Test method(11) watch.ElapsedMilliseconds=1
-Test case:httpwww.txtwizard.netcompression.txt Test method(12) watch.ElapsedMilliseconds=0
+1. Test case:httpswww.mockaroo.com.json.txt Test method(0) watch.ElapsedMilliseconds=9
+1. Test case:httpswww.mockaroo.com.json.txt Test method(1) watch.ElapsedMilliseconds=10
+1. Test case:httpswww.mockaroo.com.json.txt Test method(2) watch.ElapsedMilliseconds=1119
+1. Test case:httpswww.mockaroo.com.json.txt Test method(3) watch.ElapsedMilliseconds=3
+1. Test case:httpswww.mockaroo.com.json.txt Test method(4) watch.ElapsedMilliseconds=5
+1. Test case:httpswww.mockaroo.com.json.txt Test method(5) watch.ElapsedMilliseconds=4
+1. Test case:httpswww.mockaroo.com.json.txt Test method(6) watch.ElapsedMilliseconds=4
+1. Test case:httpswww.mockaroo.com.json.txt Test method(7) watch.ElapsedMilliseconds=46
+1. Test case:httpswww.mockaroo.com.json.txt Test method(8) watch.ElapsedMilliseconds=43
+1. Test case:httpswww.mockaroo.com.json.txt Test method(9) watch.ElapsedMilliseconds=46
+1. Test case:httpswww.mockaroo.com.json.txt Test method(10) watch.ElapsedMilliseconds=11
+1. Test case:httpswww.mockaroo.com.json.txt Test method(11) watch.ElapsedMilliseconds=14
+1. Test case:httpswww.mockaroo.com.json.txt Test method(12) watch.ElapsedMilliseconds=3
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(0) watch.ElapsedMilliseconds=2195
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(1) watch.ElapsedMilliseconds=2249
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(2) watch.ElapsedMilliseconds=1
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(3) watch.ElapsedMilliseconds=1
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(4) watch.ElapsedMilliseconds=1
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(5) watch.ElapsedMilliseconds=1
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(6) watch.ElapsedMilliseconds=1
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(7) watch.ElapsedMilliseconds=0
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(8) watch.ElapsedMilliseconds=0
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(9) watch.ElapsedMilliseconds=0
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(10) watch.ElapsedMilliseconds=0
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(11) watch.ElapsedMilliseconds=1
+1. Test case:httpwww.txtwizard.netcompression.txt Test method(12) watch.ElapsedMilliseconds=0
 
 
 ## Test Cases
