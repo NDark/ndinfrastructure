@@ -1,6 +1,6 @@
 # P_JSONParsersPerformance von ndInfrastructure
 
-## Test Result 
+## Test Results
 
 1. Test case:httpswww.mockaroo.com.json.txt Test method(0) watch.ElapsedMilliseconds=9
 1. Test case:httpswww.mockaroo.com.json.txt Test method(1) watch.ElapsedMilliseconds=10
