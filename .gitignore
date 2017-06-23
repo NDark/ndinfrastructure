@@ -5,3 +5,5 @@
 /JSONParsersPerformance/BIN/*.config
 /JSONParsersPerformance/BIN/*.pdb
 /JSONParsersPerformance/Project/*.user
+/JSONParsersPerformance/BIN/JSONParsersPerformance.vshost.exe
+/JSONParsersPerformance/BIN/JSONParsersPerformance.vshost.exe.manifest
