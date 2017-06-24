@@ -22,7 +22,7 @@ namespace JSONParsersPerformance
             {
 
                 string content = SR.ReadToEnd();
-                int testCount = 14;
+                int testCount = 15;
 
                 for (int i = 0; i < testCount; ++i)
                 {
@@ -44,6 +44,7 @@ namespace JSONParsersPerformance
                         case 11: TryParseContent_LightJson022(content); break;
                         case 12: TryParseContent_fastJSON2124(content); break;
                         case 13: TryParseContent_LitJSON090(content); break;
+                        case 14: TryParseContent_MiniJSON20130602(content); break;
                         default: break;
                     }
 
@@ -119,6 +120,12 @@ namespace JSONParsersPerformance
         static void TryParseContent_LitJSON090(string _Content)
         {
             var node = LitJson.JsonMapper.ToObject(_Content);
+        }
+
+
+        static void TryParseContent_MiniJSON20130602(string _Content)
+        {
+            var node = MiniJSON_20130602.Json.Deserialize(_Content);
         }
         
     }
