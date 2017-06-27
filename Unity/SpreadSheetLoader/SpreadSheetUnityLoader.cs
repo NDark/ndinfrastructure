@@ -45,7 +45,7 @@ public static class SpreadSheetUnityLoader
 		TextAsset ta = Resources.Load ( _AssetPath ) as TextAsset ;
 		if (null == ta) 
 		{
-			Debug.LogError("ResourceLoadSpreadSheet() null == ta");
+			Debug.LogError("ResourceLoadSpreadSheet() null == ta _AssetPath=" + _AssetPath );
 			return false ;
 		}
 		
