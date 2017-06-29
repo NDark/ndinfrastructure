@@ -78,6 +78,11 @@ public class CountDownTimer
 		}
 		return ret ; 
 	}
+ 	
+	public void PostponeNextTime( float _PostponeSec )
+	{
+		m_NextTime += _PostponeSec ;
+	}
 
 	public float NextTime
 	{
