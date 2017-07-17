@@ -33,14 +33,26 @@ SOFTWARE.
 . add Elapsedtime()
 . add RemainingTime()
 . add NextTime
+@date 20170422 by NDark . modify Rewind() and IsReady() to accept argument.
+@date 20170717 by NDark 
+. add constructor.
+. add class method Postpone().
 
-@date 20170422 by NDark
-. modify Rewind() and IsReady() to accept argument.
 
 */
 
 public class CountDownTimer
 {
+
+	public CountDownTimer()
+	{
+
+	}
+
+	public CountDownTimer( float _IntervalSec )
+	{
+		m_IntervalSec = _IntervalSec ;
+	}
 
 	public bool IsActive { get; set; }
 
@@ -52,6 +64,11 @@ public class CountDownTimer
 	public void Rewind( float _NowTime )
 	{
 		m_NextTime = _NowTime + m_IntervalSec;
+	}
+
+	public void Postpone( float _Sec )
+	{
+		m_NextTime += _Sec;
 	}
 
 	public bool IsReady( float _NowTime ) 
@@ -100,6 +117,6 @@ public class CountDownTimer
 		{ 
 			m_IntervalSec = value ;
 		} 
-	} 
+	}
 	float m_IntervalSec = float.MaxValue ;
 }
