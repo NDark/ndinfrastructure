@@ -35,8 +35,14 @@ public static partial class EditorTools
 {
 	public static void CachingCleanCache()
 	{
-		Debug.LogWarning("EditorTools::CachingCleanCache");
-		Caching.CleanCache() ;
+		if( Caching.CleanCache () )
+		{
+			Debug.Log("EditorTools::CachingCleanCache() succeed.");
+		}
+		else 
+		{
+			Debug.LogWarning("EditorTools::CachingCleanCache() failed.");
+		}
 	}
 
 	public static void PlayerPrefsDeleteAll()
