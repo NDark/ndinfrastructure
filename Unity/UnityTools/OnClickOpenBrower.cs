@@ -72,6 +72,13 @@ public class OnClickOpenBrower : MonoBehaviour
 			// Debug.Log( jsCall ) ;
 			Application.ExternalEval( _JSCall );
 		}
+#if !UNITY_5_4_OR_NEWER
+		else if( Application.platform == RuntimePlatform.WindowsWebPlayer )
+		{
+			// Debug.Log( jsCall ) ;
+			Application.ExternalEval( _JSCall );
+		}
+#endif		
 		else /*if( Application.platform == RuntimePlatform.WindowsPlayer ||
 				 Application.platform == RuntimePlatform.WindowsEditor )*/
 		{
