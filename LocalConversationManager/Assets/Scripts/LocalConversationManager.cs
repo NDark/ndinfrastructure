@@ -200,6 +200,12 @@ public class LocalConversationManager : ConversationManager
 						m_LocalGUI.SetAnswer1( tA.Answer1 ) ;
 					}
 
+					bool showBackground = ( string.Empty != tA.Background ) ;
+					if( true == showBackground )
+					{
+						m_LocalGUI.SetBackground( tA.Background ) ;
+					}
+
 				}
 
 			}

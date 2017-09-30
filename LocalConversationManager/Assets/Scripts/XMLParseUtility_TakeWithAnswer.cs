@@ -22,6 +22,7 @@ public static partial class XMLParseUtility
 		const string ANSWER1_KEY = "Answer1" ;
 		const string DIRECTION0_KEY = "Direction0" ;
 		const string DIRECTION1_KEY = "Direction1" ;
+		const string BACKGROUND_KEY = "Background" ;
 
 
 		if( null != _node.Attributes[ ANSWER0_KEY ] )
@@ -45,6 +46,11 @@ public static partial class XMLParseUtility
 			int.TryParse( _node.Attributes[ DIRECTION1_KEY ].Value , out direcitonID ) ;
 			_Take.Direction1 = direcitonID ;
 		}
+		if( null != _node.Attributes[ BACKGROUND_KEY ] )
+		{
+			_Take.Background = _node.Attributes[ BACKGROUND_KEY ].Value ;
+		}
+
 
 		return true ;
 

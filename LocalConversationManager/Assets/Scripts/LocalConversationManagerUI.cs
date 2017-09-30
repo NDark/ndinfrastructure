@@ -25,6 +25,11 @@ public class LocalConversationManagerUI : ConversationUIBase
 		onPressAnswer1() ;
 	}
 
+	public virtual void SetBackground( string _SpriteName )
+	{
+		StartCoroutine( StartLoadImageAndSet( m_Background , "file:///" + System.Environment.CurrentDirectory + PicturePath + _SpriteName ) ) ;
+	}
+
 	public override void ShowDialog( bool _Show )
 	{
 		m_Dialog.transform.parent.gameObject.SetActive( _Show ) ;

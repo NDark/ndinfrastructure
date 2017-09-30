@@ -5,6 +5,13 @@ using UnityEngine;
 public class TakeWithAnswer : Take 
 {
 
+	public string Background
+	{
+		get { return m_Background ; }
+		set { m_Background = value ; }
+	}
+	private string m_Background = string.Empty ;
+
 	public string Answer0
 	{
 		get { return m_Answer0 ; }
