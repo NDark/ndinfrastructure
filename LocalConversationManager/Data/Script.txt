@@ -1,5 +1,5 @@
 <root>
-<Take TakeUID="1" PotraitLeft="" PotraitRight="" ContentString="Cowbay1" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="1" PotraitLeft="team01.png" PotraitRight="team02.png" ContentString="Cowbay1" Answer0="" Answer1="" Direction0="" Direction1="" />
 <Take TakeUID="2" PotraitLeft="" PotraitRight="" ContentString="Cowbay2" Answer0="" Answer1="" Direction0="" Direction1="" />
 <Take TakeUID="3" PotraitLeft="" PotraitRight="" ContentString="" Answer0="1" Answer1="2" Direction0="4" Direction1="5" />
 <Story StoryUID="1" StartTakeUID="1" EndTakeUID="3" />

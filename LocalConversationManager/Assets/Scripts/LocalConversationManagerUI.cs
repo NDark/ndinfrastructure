@@ -37,7 +37,7 @@ public class LocalConversationManagerUI : ConversationUIBase
 
 	public override void SetPotraitLeft( string _SpriteName )
 	{
-
+		StartCoroutine( StartLoadImageAndSet( m_PotraitLeft , "file:///" + System.Environment.CurrentDirectory + PicturePath + _SpriteName ) ) ;
 	}
 
 	public override void ShowPotraitRight( bool _Show )
@@ -45,10 +45,12 @@ public class LocalConversationManagerUI : ConversationUIBase
 		m_PotraitRight.gameObject.SetActive( _Show ) ;
 	}
 
+	const string PicturePath = "/Data/Pictures/" ;
 	public override void SetPotraitRight( string _SpriteName )
 	{
-
+		StartCoroutine( StartLoadImageAndSet( m_PotraitRight , "file:///" + System.Environment.CurrentDirectory + PicturePath + _SpriteName ) ) ;
 	}
+
 
 	public override void SetContent( string _Content )
 	{
@@ -74,4 +76,43 @@ public class LocalConversationManagerUI : ConversationUIBase
 	{
 		m_Answer1.text = _Content ;
 	}
+
+	IEnumerator StartLoadImageAndSet( Image _Image , string _Path ) 
+	{
+
+		_Path = _Path.Replace("\\","/") ;
+		// Debug.LogWarning("_Path=" + _Path );
+
+		UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.GetTexture( _Path ) ;
+
+		yield return request.Send();
+
+		if (request.isError )
+		{
+			Debug.Log(request.error);
+		}
+		else
+		{
+			// Show results as text
+			var handler = (request.downloadHandler as UnityEngine.Networking.DownloadHandlerTexture);
+
+			if( null != handler )
+			{
+				var texture2D = handler.texture ;
+				Rect rect = new Rect( 0 , 0 , texture2D.width , texture2D.height ) ;
+
+				Sprite sp = Sprite.Create( texture2D , rect ,pivot ) ;
+				if( null != sp )
+				{
+					_Image.sprite = sp ;
+
+				}
+			}
+
+
+
+		}
+	}
+
+	Vector2 pivot = new Vector2( 0.5f , 0.5f ) ;
 }
