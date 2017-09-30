@@ -42,7 +42,7 @@ public static partial class XMLParseUtility
 		if( null != _node.Attributes[ DIRECTION1_KEY ] )
 		{
 			int direcitonID = 0 ;
-			int.TryParse( _node.Attributes[ DIRECTION0_KEY ].Value , out direcitonID ) ;
+			int.TryParse( _node.Attributes[ DIRECTION1_KEY ].Value , out direcitonID ) ;
 			_Take.Direction1 = direcitonID ;
 		}
 

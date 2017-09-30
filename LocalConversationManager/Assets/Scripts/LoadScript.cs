@@ -36,7 +36,10 @@ public class LoadScript : MonoBehaviour
 					true == XMLParseUtility.ParseStory( root.ChildNodes[i] , ref story ) )
 				{
 					m_Manager.Stories.Add( story ) ;
-					firstStoryID = story.StoryUID ;
+					if( 0 == firstStoryID )
+					{
+						firstStoryID = story.StoryUID ;
+					}
 					story = new Story() ;
 				}
 				else if( root.ChildNodes[i].Name == "Take" && 
@@ -49,6 +52,7 @@ public class LoadScript : MonoBehaviour
 
 			Debug.LogWarning("m_Manager.Stories.Count=" + m_Manager.Stories.Count ) ;
 			Debug.LogWarning("m_Manager.Takes.Count=" + m_Manager.Takes.Count ) ;
+			Debug.LogWarning("firstStoryID=" + firstStoryID ) ;
 
 			m_Manager.ActiveConversation( firstStoryID ) ;
 		}

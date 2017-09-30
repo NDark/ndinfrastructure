@@ -18,6 +18,92 @@ public class LocalConversationManager : ConversationManager
 		ShowDialogUI( false ) ;
 	}
 
+	void Handler_PressAnswer0 ()
+	{
+		if( IsWaitAnswer() )
+		{
+			int takeIndex = GetTakeIndex( m_CurrentTakeUID ) ;
+			if( takeIndex >= this.Takes.Count )
+			{
+
+			}
+			else
+			{
+				TakeWithAnswer tA =  this.Takes[ takeIndex ] as TakeWithAnswer ;	
+				if( null != tA )
+				{
+					ActiveConversation( tA.Direction0 ) ;
+				}
+			}
+			PlayNext() ;
+
+		}
+	}
+
+	void Handler_PressAnswer1 ()
+	{
+		if( IsWaitAnswer() )
+		{
+			int takeIndex = GetTakeIndex( m_CurrentTakeUID ) ;
+			if( takeIndex >= this.Takes.Count )
+			{
+
+			}
+			else
+			{
+				TakeWithAnswer tA =  this.Takes[ takeIndex ] as TakeWithAnswer ;	
+				if( null != tA )
+				{
+					ActiveConversation( tA.Direction1 ) ;
+				}
+			}
+			PlayNext() ;
+
+		}
+	}
+
+	bool IsWaitAnswer ()
+	{
+		bool waitAnswer = false ;
+		int takeIndex = GetTakeIndex( m_CurrentTakeUID ) ;
+		if( takeIndex >= this.Takes.Count )
+		{
+
+		}
+		else
+		{
+			TakeWithAnswer tA =  this.Takes[ takeIndex ] as TakeWithAnswer ;	
+			waitAnswer = ( tA.Answer0 != string.Empty || tA.Answer1 != string.Empty );
+		}
+
+		return waitAnswer ;
+	}
+	protected override bool CheckIfPress()
+	{
+		bool ret = false ;
+
+		bool waitAnswer = IsWaitAnswer() ;
+
+
+		if( waitAnswer )
+		{
+			// don't go down
+		}
+		else if( false == m_MouseIsDown &&
+			true == Input.GetMouseButtonDown( 0 ) )
+		{
+			m_MouseIsDown = true ;
+			ret = true ;
+		}
+		else if( true == m_MouseIsDown && 
+			false == Input.GetMouseButtonDown( 0 ))
+		{
+			m_MouseIsDown = false ;
+		}
+		return ret ; 
+	}
+
+
 	protected override void CloseConversationGUI()
 	{
 		m_LocalGUI.TryInitializedStructure() ;

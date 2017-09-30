@@ -1,4 +1,11 @@
 <root>
-<Take TakeUID="1" PotraitLeft="" PotraitRight="" ContentString="Cowbay" Answer0="1" Answer1="2" Direction0="" Direction1="" />
-<Story StoryUID="1" StartTakeUID="1" EndTakeUID="1" />
+<Take TakeUID="1" PotraitLeft="" PotraitRight="" ContentString="Cowbay1" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="2" PotraitLeft="" PotraitRight="" ContentString="Cowbay2" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="3" PotraitLeft="" PotraitRight="" ContentString="" Answer0="1" Answer1="2" Direction0="4" Direction1="5" />
+<Story StoryUID="1" StartTakeUID="1" EndTakeUID="3" />
+<Story StoryUID="4" StartTakeUID="4" EndTakeUID="4" />
+<Story StoryUID="5" StartTakeUID="5" EndTakeUID="5" />
+
+<Take TakeUID="4" PotraitLeft="" PotraitRight="" ContentString="Cowbay4" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="5" PotraitLeft="" PotraitRight="" ContentString="Cowbay5" Answer0="" Answer1="" Direction0="" Direction1="" />
 </root>
