@@ -14,8 +14,22 @@ public class LocalConversationManager : ConversationManager
 		{
 			Debug.LogError( "null == m_LocalGUI" ) ;
 		}
+		else
+		{
+			m_LocalGUI.onPressAnswer0 += Handler_PressAnswer0 ;
+			m_LocalGUI.onPressAnswer1 += Handler_PressAnswer1 ;
+		}
 
 		ShowDialogUI( false ) ;
+	}
+
+	void OnDestroy()
+	{
+		if( null != m_LocalGUI )
+		{
+			m_LocalGUI.onPressAnswer0 -= Handler_PressAnswer0 ;
+			m_LocalGUI.onPressAnswer1 -= Handler_PressAnswer1 ;
+		}
 	}
 
 	void Handler_PressAnswer0 ()

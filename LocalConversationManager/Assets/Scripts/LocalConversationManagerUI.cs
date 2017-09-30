@@ -12,6 +12,18 @@ public class LocalConversationManagerUI : ConversationUIBase
 	public Text m_Answer0 = null ;
 	public Text m_Answer1 = null ;
 
+	public System.Action onPressAnswer0 = new System.Action( () => {} ) ;
+	public System.Action onPressAnswer1 = new System.Action( () => {} ) ;
+
+	public void PressAnswer0()
+	{
+		onPressAnswer0() ;
+	}
+
+	public void PressAnswer1()
+	{
+		onPressAnswer1() ;
+	}
 
 	public override void ShowDialog( bool _Show )
 	{
