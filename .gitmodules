@@ -1,0 +1,4 @@
+[submodule "LocalConversationManager/Assets/Infra/ConversationManager_XML"]
+	path = LocalConversationManager/Assets/Infra/ConversationManager_XML
+	url = https://github.com/NDark/ndinfrastructure.git
+	branch = ConversationManager_XML
