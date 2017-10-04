@@ -51,14 +51,14 @@ public static class UnityFind
 		var trans = _Root.Find( _Name );
 		if( null == trans )
 		{
-			Debug.LogError( _Name );
+			Debug.LogError( "ComponentFind() null == trans _Name=" + _Name );
 			return default(T) ;
 		}
 		
 		var c = trans.gameObject.GetComponent<T>();
 		if( null == c )
 		{
-			Debug.LogError( "null == c" );
+			Debug.LogError( "ComponentFind() null == component _Name=" + _Name ) ;
 			return default(T) ;
 		}
 		return c;
