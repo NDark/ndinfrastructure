@@ -1,11 +1,15 @@
 <root>
-<Take TakeUID="1" Background="background.jpg" PotraitLeft="team01.png" PotraitRight="team02.png" ContentString="Cowbay1" Answer0="" Answer1="" Direction0="" Direction1="" />
-<Take TakeUID="2" Background="" PotraitLeft="" PotraitRight="" ContentString="Cowbay2" Answer0="" Answer1="" Direction0="" Direction1="" />
-<Take TakeUID="3" Background="" PotraitLeft="" PotraitRight="" ContentString="" Answer0="1" Answer1="2" Direction0="4" Direction1="5" />
-<Story StoryUID="1" StartTakeUID="1" EndTakeUID="3" />
-<Story StoryUID="4" StartTakeUID="4" EndTakeUID="4" />
-<Story StoryUID="5" StartTakeUID="5" EndTakeUID="5" />
+<Take TakeUID="1" Background="background.jpg" PotraitLeft="1p.jpg" PotraitRight="" ContentString="ㄟ！哩看，咱們ㄟ代誌，今日的報紙擱刊出來。" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="2" Background="background.jpg" PotraitLeft="" PotraitRight="2p.jpg" ContentString="大仔！阿現在日本仔看到咱們就會驚～" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="3" Background="background.jpg" PotraitLeft="" PotraitRight="2p.jpg" ContentString="但是現在，我腹肚有夠夭。" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="4" Background="background.jpg" PotraitLeft="1p.jpg" PotraitRight="" ContentString="報紙寫說，日本人在台中又開了一間新ㄟ餐廳。" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="5" Background="background.jpg" PotraitLeft="" PotraitRight="2p.jpg" ContentString="安餒，咱們都來行～" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="6" Background="background.jpg" PotraitLeft="1p.jpg" PotraitRight="" ContentString="啊～報紙吹走了。緊停車啦。" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="7" Background="background.jpg" PotraitLeft="" PotraitRight="2p.jpg" ContentString="厚～大仔！管胎伊啦。" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="8" Background="background.jpg" PotraitLeft="" PotraitRight="" ContentString="曾經驚動黑白兩道，廖添丁和紅龜兩兄弟－屬於台灣鄉土的傳奇故事，將會永遠的流傳下去。" Answer0="" Answer1="" Direction0="" Direction1="" />
+<Take TakeUID="9" Background="" PotraitLeft="" PotraitRight="" ContentString="" Answer0="回到開頭" Answer1="結束" Direction0="1" Direction1="4" />
+<Story StoryUID="1" StartTakeUID="1" EndTakeUID="9" />
+<Story StoryUID="4" StartTakeUID="8" EndTakeUID="8" />
 
-<Take TakeUID="4" Background="" PotraitLeft="" PotraitRight="" ContentString="Cowbay4" Answer0="" Answer1="" Direction0="" Direction1="" />
-<Take TakeUID="5" Background="" PotraitLeft="" PotraitRight="" ContentString="Cowbay5" Answer0="" Answer1="" Direction0="" Direction1="" />
+
 </root>
