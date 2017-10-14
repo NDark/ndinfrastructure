@@ -104,6 +104,13 @@ public class LocalConversationManagerUI : ConversationUIBase
 			if( null != handler )
 			{
 				var texture2D = handler.texture ;
+
+				if( null == texture2D )
+				{
+					Debug.Log("null == texture2D");
+					yield break;
+				}
+
 				Rect rect = new Rect( 0 , 0 , texture2D.width , texture2D.height ) ;
 
 				Sprite sp = Sprite.Create( texture2D , rect ,pivot ) ;
