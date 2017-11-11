@@ -45,6 +45,7 @@ public class OnEscapeLeaveGame : MonoBehaviour {
 	{
 		if( Input.GetKeyUp(KeyCode.Escape) )
 		{
+			// Debug.LogWarning("Application.Quit");
 			Application.Quit() ;
 		}
 		
