@@ -49,6 +49,8 @@ public static partial class EditorTools
 	{
 		Debug.LogWarning("EditorTools::PlayerPrefsDeleteAll() remember this just remove PlayerPrefs of editor platform.");
 		PlayerPrefs.DeleteAll() ;
+		PlayerPrefs.Save();
+
 	}
 
 }
