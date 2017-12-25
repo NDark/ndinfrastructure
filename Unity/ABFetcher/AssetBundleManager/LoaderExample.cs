@@ -155,7 +155,7 @@ public class LoaderExample : MonoBehaviour
 		yield return StartCoroutine(request);
 		
 		// Get the asset.
-		var requestBundle = request as OneBundleLoadOperation ;
+		var requestBundle = request as ABOneBundleLoader ;
 		var bundleObject = requestBundle.GetBundle() ;
 
 		bundleLoadHandler( assetBundleName , bundleObject ) ;

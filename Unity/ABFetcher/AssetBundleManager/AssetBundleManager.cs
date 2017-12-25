@@ -545,13 +545,13 @@ namespace AssetBundles
 		
 #if ENABLE_NDINFRA_ONE_BUNDLE
 		// Load asset from the given assetBundle.
-		static public OneBundleLoadOperation LoadBundleAsync (string assetBundleName )
+		static public ABOneBundleLoader LoadBundleAsync (string assetBundleName )
 		{
 #if ENABLE_NDINFRA_DEBUG_INFO
 			Log(LogType.Info, "LoadBundleAsync Loading " + assetBundleName );
 #endif // ENABLE_NDINFRA_DEBUG_INFO
 			
-			OneBundleLoadOperation operation = null;
+			ABOneBundleLoader operation = null;
 			#if UNITY_EDITOR
 			if (SimulateAssetBundleInEditor)
 			{
@@ -564,7 +564,7 @@ namespace AssetBundles
 
 				// @TODO: Now we only get the main object from the first asset. Should consider type also.
 				Object target = AssetDatabase.LoadMainAssetAtPath(assetPaths[0]);
-				operation = new OneBundleLoadOperationSimulation ( assetBundleName , target);
+				operation = new ABOneBundleLoaderSimulation ( assetBundleName , target);
 
 			}
 			else
@@ -572,7 +572,7 @@ namespace AssetBundles
 			{
 				assetBundleName = RemapVariantName (assetBundleName);
 				LoadAssetBundle (assetBundleName);
-				operation = new OneBundleLoadOperation (assetBundleName);
+				operation = new ABOneBundleLoader (assetBundleName);
 				
 				m_InProgressOperations.Add (operation);
 			}

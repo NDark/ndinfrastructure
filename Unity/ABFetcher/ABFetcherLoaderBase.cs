@@ -84,7 +84,7 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		else
 		{
 #if ENABLE_NDINFRA_ONE_BUNDLE
-			StartCoroutine( LoadAssetBundle_Delegate( _BundleName ) ) ;
+			StartCoroutine( LoadOneBundle_Delegate( _BundleName ) ) ;
 #endif 
 		}
 	}
