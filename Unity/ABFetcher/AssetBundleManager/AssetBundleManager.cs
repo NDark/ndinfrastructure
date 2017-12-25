@@ -1,4 +1,12 @@
-﻿using UnityEngine;
+﻿// #define ENABLE_NDINFRA_ONE_BUNDLE 
+
+// #define ENABLE_NDINFRA_CUSTOM
+
+// #define ENABLE_NDINFRA_DEBUG_INFO
+
+// #define ENABLE_NDINFRA_NO_LOG
+
+using UnityEngine;
 #if UNITY_EDITOR	
 using UnityEditor;
 #endif
@@ -27,10 +35,23 @@ namespace AssetBundles
 		public AssetBundle m_AssetBundle;
 		public int m_ReferencedCount;
 		
-		public LoadedAssetBundle(AssetBundle assetBundle)
+#if ENABLE_NDINFRA_CUSTOM
+		public string m_Key ;
+#endif // ENABLE_NDINFRA_CUSTOM
+
+		public LoadedAssetBundle(AssetBundle assetBundle
+#if ENABLE_NDINFRA_CUSTOM
+		                         , string _Key
+#endif // ENABLE_NDINFRA_CUSTOM
+		)
 		{
+#if ENABLE_NDINFRA_CUSTOM
+			m_Key = _Key ;
+#endif // ENABLE_NDINFRA_CUSTOM
+
 			m_AssetBundle = assetBundle;
 			m_ReferencedCount = 1;
+
 		}
 	}
 	
@@ -54,7 +75,13 @@ namespace AssetBundles
 		static Dictionary<string, string> m_DownloadingErrors = new Dictionary<string, string> ();
 		static List<AssetBundleLoadOperation> m_InProgressOperations = new List<AssetBundleLoadOperation> ();
 		static Dictionary<string, string[]> m_Dependencies = new Dictionary<string, string[]> ();
-	
+		
+#if ENABLE_NDINFRA_CUSTOM
+		static public Dictionary<string /*bundle key*/, int/*version*/> m_LocalBundleTable = new Dictionary<string, int>() ;
+		static public bool m_EnableVersionCheck = true ;
+		static public Dictionary<string /*bundle key*/, int/*version*/> m_VersionTable = new Dictionary<string, int>() ;
+#endif // ENABLE_NDINFRA_CUSTOM
+		
 		public static LogMode logMode
 		{
 			get { return m_LogMode; }
@@ -74,19 +101,34 @@ namespace AssetBundles
 			get { return m_ActiveVariants; }
 			set { m_ActiveVariants = value; }
 		}
-	
+		
+#if ENABLE_NDINFRA_CUSTOM
+		public static bool IsAssetBundleManifestNotNull()
+		{
+			return ( null != AssetBundles.AssetBundleManager.m_AssetBundleManifest ) ;
+		}
+#endif // ENABLE_NDINFRA_CUSTOM
+		
 		// AssetBundleManifest object which can be used to load the dependecies and check suitable assetBundle variants.
 		public static AssetBundleManifest AssetBundleManifestObject
 		{
 			set {m_AssetBundleManifest = value; }
+			
+#if ENABLE_NDINFRA_CUSTOM
+			get { return m_AssetBundleManifest ; }
+#endif // ENABLE_NDINFRA_CUSTOM
+
 		}
 	
 		private static void Log(LogType logType, string text)
 		{
+#if ENABLE_NDINFRA_NO_LOG
+#else
 			if (logType == LogType.Error)
 				Debug.LogError("[AssetBundleManager] " + text);
 			else if (m_LogMode == LogMode.All)
 				Debug.Log("[AssetBundleManager] " + text);
+#endif 				
 		}
 	
 	#if UNITY_EDITOR
@@ -120,10 +162,17 @@ namespace AssetBundles
 				return "file://" +  System.Environment.CurrentDirectory.Replace("\\", "/"); // Use the build output folder directly.
 			else if (Application.isWebPlayer)
 				return System.IO.Path.GetDirectoryName(Application.absoluteURL).Replace("\\", "/")+ "/StreamingAssets";
+
+			/*
+			http://answers.unity3d.com/questions/525737/cant-get-streaming-assets-folder-to-work-with-the.html
+			*/
+			else if (Application.platform == RuntimePlatform.IPhonePlayer )
+				return "file://" + Application.streamingAssetsPath;
+			
 			else if (Application.isMobilePlatform || Application.isConsolePlatform)
 				return Application.streamingAssetsPath;
 			else // For standalone player.
-				return "file://" +  Application.streamingAssetsPath;
+				return "file://" + Application.streamingAssetsPath;
 		}
 	
 		public static void SetSourceAssetBundleDirectory(string relativePath)
@@ -292,6 +341,10 @@ namespace AssetBundles
 		// Where we actuall call WWW to download the assetBundle.
 		static protected bool LoadAssetBundleInternal (string assetBundleName, bool isLoadingAssetBundleManifest)
 		{
+#if ENABLE_NDINFRA_DEBUG_INFO			
+			Debug.LogWarning ("LoadAssetBundleInternal assetBundleName=" + assetBundleName ) ;
+#endif// ENABLE_NDINFRA_DEBUG_INFO
+
 			// Already loaded.
 			LoadedAssetBundle bundle = null;
 			m_LoadedAssetBundles.TryGetValue(assetBundleName, out bundle);
@@ -310,12 +363,51 @@ namespace AssetBundles
 			WWW download = null;
 			string url = m_BaseDownloadingURL + assetBundleName;
 		
+#if ENABLE_NDINFRA_CUSTOM
+
+#if ENABLE_NDINFRA_DEBUG_INFO
+			Debug.LogWarning ("LoadAssetBundleInternal url=" + url ) ;
+#endif // ENABLE_NDINFRA_DEBUG_INFO
+
+			bool isVersionExist = m_VersionTable.ContainsKey( assetBundleName ) ;
+
+			// check if we need to use local asset bundle
+			bool isLocalExist = m_LocalBundleTable.ContainsKey( assetBundleName ) ;
+			bool isUseLocalBundle = isUseLocalBundle = ( isLocalExist && !isVersionExist ) 
+							|| ( isLocalExist 
+								 && isVersionExist 
+							     && m_LocalBundleTable[assetBundleName] >= m_VersionTable[assetBundleName] ) ;
+
+			if( true == isUseLocalBundle )
+			{
+				url = GetStreamingAssetsPath() + "/AssetBundles/" + Utility.GetPlatformName() + "/"+ assetBundleName ;
+				// Debug.LogWarning("local bundle url=" + url );
+			}
+
+			if( m_EnableVersionCheck && isVersionExist )
+			{
+				download = WWW.LoadFromCacheOrDownload( url , m_VersionTable[ assetBundleName ] ) ;
+			}
+			else
+			{
+			
+#if ENABLE_NDINFRA_DEBUG_INFO
+			Debug.LogWarning("LoadAssetBundleInternal version not exists, beware of caching." ) ;
+#endif // ENABLE_NDINFRA_DEBUG_INFO
+
+#endif // ENABLE_NDINFRA_CUSTOM
+
 			// For manifest assetbundle, always download it as we don't have hash for it.
 			if (isLoadingAssetBundleManifest)
 				download = new WWW(url);
 			else
 				download = WWW.LoadFromCacheOrDownload(url, m_AssetBundleManifest.GetAssetBundleHash(assetBundleName), 0); 
-	
+				
+#if ENABLE_NDINFRA_CUSTOM				
+			}				
+#endif 	// ENABLE_NDINFRA_CUSTOM
+
+
 			m_DownloadingWWWs.Add(assetBundleName, download);
 	
 			return false;
@@ -420,7 +512,12 @@ namespace AssetBundles
 					}
 				
 					//Debug.Log("Downloading " + keyValue.Key + " is done at frame " + Time.frameCount);
-					m_LoadedAssetBundles.Add(keyValue.Key, new LoadedAssetBundle(download.assetBundle) );
+					m_LoadedAssetBundles.Add(keyValue.Key, 
+					new LoadedAssetBundle(download.assetBundle 
+#if ENABLE_NDINFRA_CUSTOM
+					                      , keyValue.Key
+#endif
+					) );
 					keysToRemove.Add(keyValue.Key);
 				}
 			}
@@ -445,11 +542,53 @@ namespace AssetBundles
 			}
 		}
 	
+		
+#if ENABLE_NDINFRA_ONE_BUNDLE
+		// Load asset from the given assetBundle.
+		static public OneBundleLoadOperation LoadBundleAsync (string assetBundleName )
+		{
+#if ENABLE_NDINFRA_DEBUG_INFO
+			Log(LogType.Info, "LoadBundleAsync Loading " + assetBundleName );
+#endif // ENABLE_NDINFRA_DEBUG_INFO
+			
+			OneBundleLoadOperation operation = null;
+			#if UNITY_EDITOR
+			if (SimulateAssetBundleInEditor)
+			{
+				string[] assetPaths = AssetDatabase.GetAssetPathsFromAssetBundle(assetBundleName );
+				if (assetPaths.Length == 0)
+				{
+					Debug.LogError("There is no bundle with name " + assetBundleName);
+					return null;
+				}
+
+				// @TODO: Now we only get the main object from the first asset. Should consider type also.
+				Object target = AssetDatabase.LoadMainAssetAtPath(assetPaths[0]);
+				operation = new OneBundleLoadOperationSimulation ( assetBundleName , target);
+
+			}
+			else
+			#endif
+			{
+				assetBundleName = RemapVariantName (assetBundleName);
+				LoadAssetBundle (assetBundleName);
+				operation = new OneBundleLoadOperation (assetBundleName);
+				
+				m_InProgressOperations.Add (operation);
+			}
+			
+			return operation;
+		}
+#endif // ENABLE_NDINFRA_ONE_BUNDLE
+		
+		
 		// Load asset from the given assetBundle.
 		static public AssetBundleLoadAssetOperation LoadAssetAsync (string assetBundleName, string assetName, System.Type type)
 		{
-			Log(LogType.Info, "Loading " + assetName + " from " + assetBundleName + " bundle");
-	
+#if ENABLE_NDINFRA_DEBUG_INFO
+			Log(LogType.Info, "LoadAssetAsync Loading " + assetName + " from " + assetBundleName );
+#endif // ENABLE_NDINFRA_DEBUG_INFO
+
 			AssetBundleLoadAssetOperation operation = null;
 	#if UNITY_EDITOR
 			if (SimulateAssetBundleInEditor)

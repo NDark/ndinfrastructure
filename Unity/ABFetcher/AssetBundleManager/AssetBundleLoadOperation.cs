@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿
+// #define ENABLE_NDINFRA_DEBUG_INFO
+
+using UnityEngine;
 using System.Collections;
 
 namespace AssetBundles
@@ -85,10 +88,13 @@ namespace AssetBundles
 			LoadedAssetBundle bundle = AssetBundleManager.GetLoadedAssetBundle (m_AssetBundleName, out m_DownloadingError);
 			if (bundle != null)
 			{
+#if ENABLE_NDINFRA_DEBUG_INFO
+				Debug.Log("AssetBundleLoadLevelOperation.Update() m_LevelName=" + m_LevelName ) ;
+#endif
 				if (m_IsAdditive)
-					m_Request = Application.LoadLevelAdditiveAsync (m_LevelName);
+					m_Request = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (m_LevelName , UnityEngine.SceneManagement.LoadSceneMode.Additive);
 				else
-					m_Request = Application.LoadLevelAsync (m_LevelName);
+					m_Request = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (m_LevelName);
 				return false;
 			}
 			else
