@@ -362,7 +362,7 @@ namespace AssetBundles
 	
 			WWW download = null;
 			string url = m_BaseDownloadingURL + assetBundleName;
-		
+
 #if ENABLE_NDINFRA_CUSTOM
 
 #if ENABLE_NDINFRA_DEBUG_INFO
@@ -381,7 +381,9 @@ namespace AssetBundles
 			if( true == isUseLocalBundle )
 			{
 				url = GetStreamingAssetsPath() + "/AssetBundles/" + Utility.GetPlatformName() + "/"+ assetBundleName ;
-				// Debug.LogWarning("local bundle url=" + url );
+#if ENABLE_NDINFRA_DEBUG_INFO
+				Debug.LogWarning("LoadAssetBundleInternal local bundle url=" + url );
+#endif 
 			}
 
 			if( m_EnableVersionCheck && isVersionExist )
@@ -593,6 +595,11 @@ namespace AssetBundles
 	#if UNITY_EDITOR
 			if (SimulateAssetBundleInEditor)
 			{
+				if( !assetBundleName.EndsWith( ".na" ) )
+				{
+					assetBundleName += ".na" ;
+				}
+
 				string[] assetPaths = AssetDatabase.GetAssetPathsFromAssetBundleAndAssetName(assetBundleName, assetName);
 				if (assetPaths.Length == 0)
 				{
