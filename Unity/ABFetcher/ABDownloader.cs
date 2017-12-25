@@ -47,7 +47,7 @@ public class ABDownloader : ABDownloaderBase
 		{
 			string bundleKey = iEnum.Current.Value.Key ;
 #if ENABLE_NDINFRA_CUSTOM
-			AssetBundles.AssetBundleManager.m_BundleVersionTable.Add( bundleKey , iEnum.Current.Value.Version ) ;
+			AssetBundles.AssetBundleManager.m_VersionTable.Add( bundleKey , iEnum.Current.Value.Version ) ;
 #endif 			
 			string url = AssetBundles.AssetBundleManager.BaseDownloadingURL + bundleKey ;
 

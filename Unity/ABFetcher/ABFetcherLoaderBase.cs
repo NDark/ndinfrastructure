@@ -62,7 +62,7 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 #if ENABLE_NDINFRA_CUSTOM
 	public bool IsAssetBundleManifestObjectNotNull()
 	{
-		return AssetBundles.AssetBundleManager.IsAssetBundleManifestObjectNotNull() ;
+		return AssetBundles.AssetBundleManager.IsAssetBundleManifestNotNull() ;
 	}
 #endif //
 	

@@ -373,7 +373,7 @@ namespace AssetBundles
 
 			// check if we need to use local asset bundle
 			bool isLocalExist = m_LocalBundleTable.ContainsKey( assetBundleName ) ;
-			bool isUseLocalBundle = isUseLocalBundle = ( isLocalExist && !isVersionExist ) 
+			bool isUseLocalBundle = ( isLocalExist && !isVersionExist ) 
 							|| ( isLocalExist 
 								 && isVersionExist 
 							     && m_LocalBundleTable[assetBundleName] >= m_VersionTable[assetBundleName] ) ;
