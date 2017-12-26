@@ -36,12 +36,12 @@ namespace AssetBundles
 		public int m_ReferencedCount;
 		
 #if ENABLE_NDINFRA_CUSTOM
-		public string m_Key ;
+		public string m_Key ;// the key of this bundle
 #endif // ENABLE_NDINFRA_CUSTOM
 
 		public LoadedAssetBundle(AssetBundle assetBundle
 #if ENABLE_NDINFRA_CUSTOM
-		                         , string _Key
+			, string _Key // assign m_Key
 #endif // ENABLE_NDINFRA_CUSTOM
 		)
 		{
@@ -69,7 +69,8 @@ namespace AssetBundles
 		static int m_SimulateAssetBundleInEditor = -1;
 		const string kSimulateAssetBundles = "SimulateAssetBundles";
 	#endif
-	
+
+		// the key is bundle key without variant extension
 		static Dictionary<string, LoadedAssetBundle> m_LoadedAssetBundles = new Dictionary<string, LoadedAssetBundle> ();
 		static Dictionary<string, WWW> m_DownloadingWWWs = new Dictionary<string, WWW> ();
 		static Dictionary<string, string> m_DownloadingErrors = new Dictionary<string, string> ();
@@ -77,11 +78,16 @@ namespace AssetBundles
 		static Dictionary<string, string[]> m_Dependencies = new Dictionary<string, string[]> ();
 		
 #if ENABLE_NDINFRA_CUSTOM
+		// bundles which save in local folder: StreamingAssets.
 		static public Dictionary<string /*bundle key*/, int/*version*/> m_LocalBundleTable = new Dictionary<string, int>() ;
+
+		// as long as enable, www download will be checked by version.
 		static public bool m_EnableVersionCheck = true ;
+
+		// a table which provides version checking data.
 		static public Dictionary<string /*bundle key*/, int/*version*/> m_VersionTable = new Dictionary<string, int>() ;
 #endif // ENABLE_NDINFRA_CUSTOM
-		
+
 		public static LogMode logMode
 		{
 			get { return m_LogMode; }
@@ -103,6 +109,7 @@ namespace AssetBundles
 		}
 		
 #if ENABLE_NDINFRA_CUSTOM
+		// check AssetBundles.AssetBundleManager.m_AssetBundleManifest exists or not.
 		public static bool IsAssetBundleManifestNotNull()
 		{
 			return ( null != AssetBundles.AssetBundleManager.m_AssetBundleManifest ) ;
@@ -123,6 +130,7 @@ namespace AssetBundles
 		private static void Log(LogType logType, string text)
 		{
 #if ENABLE_NDINFRA_NO_LOG
+			// enable this for no loggin from Log()
 #else
 			if (logType == LogType.Error)
 				Debug.LogError("[AssetBundleManager] " + text);
@@ -215,7 +223,8 @@ namespace AssetBundles
 			LoadedAssetBundle bundle = null;
 
 #if ENABLE_NDINFRA_CUSTOM
-			string shortKey = RemovePostVarian( assetBundleName ) ;
+			// assetBundleName may be with variant extention, but m_LoadedAssetBundles doesn't
+			string shortKey = RemovePostVariant( assetBundleName ) ;
 			m_LoadedAssetBundles.TryGetValue(shortKey, out bundle);
 #else 
 			m_LoadedAssetBundles.TryGetValue(assetBundleName, out bundle);
@@ -346,7 +355,16 @@ namespace AssetBundles
 		}
 
 #if ENABLE_NDINFRA_CUSTOM
-		public static string RemovePostVarian( string _Key )
+		public static string AddNAPostVariant( string _Key )
+		{
+			if( !_Key.EndsWith( ".na" ) )
+			{
+				_Key += ".na" ;
+			}
+			return _Key ;
+		}
+
+		public static string RemovePostVariant( string _Key )
 		{
 			string ret = _Key ;
 			int index = -1;
@@ -356,12 +374,13 @@ namespace AssetBundles
 			}
 			return ret ;
 		}
-#endif 
+#endif // ENABLE_NDINFRA_CUSTOM
+
 		// Where we actuall call WWW to download the assetBundle.
 		static protected bool LoadAssetBundleInternal (string assetBundleName, bool isLoadingAssetBundleManifest)
 		{
-#if ENABLE_NDINFRA_DEBUG_INFO			
-			Debug.LogWarning ("LoadAssetBundleInternal assetBundleName=" + assetBundleName ) ;
+#if ENABLE_NDINFRA_DEBUG_INFO
+			AssetBundleManager.Log( LogType.Info , "LoadAssetBundleInternal assetBundleName=" + assetBundleName ) ;
 #endif// ENABLE_NDINFRA_DEBUG_INFO
 
 			// Already loaded.
@@ -383,38 +402,43 @@ namespace AssetBundles
 			string url = m_BaseDownloadingURL + assetBundleName;
 
 #if ENABLE_NDINFRA_CUSTOM
+			// start check version
+			// assetBundleName is with variant extension.
 
 #if ENABLE_NDINFRA_DEBUG_INFO
 			Debug.LogWarning ("LoadAssetBundleInternal url=" + url ) ;
 #endif // ENABLE_NDINFRA_DEBUG_INFO
-			string shortABName = RemovePostVarian(assetBundleName) ;
 
-			bool isVersionExist = m_VersionTable.ContainsKey( shortABName ) ;
+			string keyWoVariant = RemovePostVariant(assetBundleName) ;
+
+			bool isVersionExist = m_VersionTable.ContainsKey( keyWoVariant ) ;
 
 			// check if we need to use local asset bundle
-			bool isLocalExist = m_LocalBundleTable.ContainsKey( shortABName ) ;
-			bool isUseLocalBundle = ( isLocalExist && !isVersionExist ) 
-							|| ( isLocalExist 
-								 && isVersionExist 
-					&& m_LocalBundleTable[shortABName] >= m_VersionTable[shortABName] ) ;
+			bool isLocalExist = m_LocalBundleTable.ContainsKey( keyWoVariant ) ;
+			bool isUseLocalBundle = isLocalExist 
+								 && ( !isVersionExist || ( isVersionExist 
+								 						   && m_LocalBundleTable[keyWoVariant] >= m_VersionTable[keyWoVariant] ) ) ;
 
 			if( true == isUseLocalBundle )
 			{
+				// change path to streaming assets path
 				url = GetStreamingAssetsPath() + "/AssetBundles/" + Utility.GetPlatformName() + "/"+ assetBundleName ;
 #if ENABLE_NDINFRA_DEBUG_INFO
-				Debug.LogWarning("LoadAssetBundleInternal local bundle url=" + url );
-#endif 
+				AssetBundleManager.Log( LogType.Info , "LoadAssetBundleInternal local bundle url=" + url ) ;
+#endif // ENABLE_NDINFRA_DEBUG_INFO
+
 			}
 
 			if( m_EnableVersionCheck && isVersionExist )
 			{
-				download = WWW.LoadFromCacheOrDownload( url , m_VersionTable[ shortABName ] ) ;
+				// url was used here
+				download = WWW.LoadFromCacheOrDownload( url , m_VersionTable[ keyWoVariant ] ) ;
 			}
 			else
 			{
 			
 #if ENABLE_NDINFRA_DEBUG_INFO
-			Debug.LogWarning("LoadAssetBundleInternal version not exists, beware of caching." ) ;
+			AssetBundleManager.Log( LogType.Info , "LoadAssetBundleInternal version not exists, beware of caching." ) ;
 #endif // ENABLE_NDINFRA_DEBUG_INFO
 
 #endif // ENABLE_NDINFRA_CUSTOM
@@ -424,7 +448,7 @@ namespace AssetBundles
 				download = new WWW(url);
 			else
 				download = WWW.LoadFromCacheOrDownload(url, m_AssetBundleManifest.GetAssetBundleHash(assetBundleName), 0); 
-				
+
 #if ENABLE_NDINFRA_CUSTOM				
 			}				
 #endif 	// ENABLE_NDINFRA_CUSTOM
@@ -534,14 +558,15 @@ namespace AssetBundles
 					}
 				
 					//Debug.Log("Downloading " + keyValue.Key + " is done at frame " + Time.frameCount);
-					string shortKey = RemovePostVarian(keyValue.Key) ;
+					string shortKey = RemovePostVariant(keyValue.Key) ;
 
 					m_LoadedAssetBundles.Add(shortKey, 
 					new LoadedAssetBundle(download.assetBundle 
 #if ENABLE_NDINFRA_CUSTOM
-					                      , keyValue.Key
-#endif
+							, shortKey
+#endif // ENABLE_NDINFRA_CUSTOM
 					) );
+
 					keysToRemove.Add(keyValue.Key);
 				}
 			}
@@ -576,7 +601,10 @@ namespace AssetBundles
 #endif // ENABLE_NDINFRA_DEBUG_INFO
 			
 			ABOneBundleLoader operation = null;
-			#if UNITY_EDITOR
+#if UNITY_EDITOR
+
+			assetBundleName = AddNAPostVariant( assetBundleName ) ;
+
 			if (SimulateAssetBundleInEditor)
 			{
 				string[] assetPaths = AssetDatabase.GetAssetPathsFromAssetBundle(assetBundleName );
@@ -592,12 +620,11 @@ namespace AssetBundles
 
 			}
 			else
-			#endif
+#endif
 			{
 				assetBundleName = RemapVariantName (assetBundleName);
 				LoadAssetBundle (assetBundleName);
 				operation = new ABOneBundleLoader (assetBundleName);
-				
 				m_InProgressOperations.Add (operation);
 			}
 			
@@ -617,10 +644,7 @@ namespace AssetBundles
 	#if UNITY_EDITOR
 			if (SimulateAssetBundleInEditor)
 			{
-				if( !assetBundleName.EndsWith( ".na" ) )
-				{
-					assetBundleName += ".na" ;
-				}
+				assetBundleName = AddNAPostVariant( assetBundleName ) ;
 
 				string[] assetPaths = AssetDatabase.GetAssetPathsFromAssetBundleAndAssetName(assetBundleName, assetName);
 				if (assetPaths.Length == 0)

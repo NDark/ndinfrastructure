@@ -29,7 +29,7 @@ public class LoaderExample : MonoBehaviour
 	// Use this for initialization.
 	IEnumerator Start ()
 	{
-		yield return StartCoroutine(Initialize() );
+		yield return StartCoroutine( Initialize() );
 	}
 	
 	// Initialize the downloading url and AssetBundleManifest object.
@@ -70,10 +70,9 @@ public class LoaderExample : MonoBehaviour
 			yield return StartCoroutine(request);
 	}
 	
-	
 	protected virtual IEnumerator LoadAssetAsync_Callback (string assetBundleName
-		, string assetName 
-	                                              , System.Action<UnityEngine.Object> _CallbackFunc)
+			, string assetName 
+			, System.Action<UnityEngine.Object> _CallbackFunc )
 	{
 #if ENABLE_NDINFRA_EXAMPLE_LOG
 		// This is simply to get the elapsed time for this phase of AssetLoading.
@@ -81,7 +80,7 @@ public class LoaderExample : MonoBehaviour
 #endif
 
 		// Load asset from assetBundle.
-		AssetBundleLoadAssetOperation request = 
+		var request = 
 			AssetBundleManager.LoadAssetAsync(assetBundleName, assetName, typeof(UnityEngine.Object) );
 		if (request == null)
 		{
@@ -97,11 +96,8 @@ public class LoaderExample : MonoBehaviour
 		_CallbackFunc( assetObject ) ;
 
 #if ENABLE_NDINFRA_EXAMPLE_LOG
-		// Calculate and display the elapsed time.
-		float elapsed = Time.realtimeSinceStartup - start;
-
-		Debug.Log(assetName + (null == assetObject ? " was not" : " was")+ " loaded successfully in " + elapsed + " seconds" ) ;
-#endif	
+		LogFinishTime( "Assets " + assetBundleName + (null == assetObject ? " was not" : " was") + " loaded successfully " , string.Empty , start ) ;
+#endif // ENABLE_NDINFRA_EXAMPLE_LOG	
 		
 	}
 	
@@ -113,7 +109,7 @@ public class LoaderExample : MonoBehaviour
 #endif
 
 		// Load asset from assetBundle.
-		AssetBundleLoadAssetOperation request = 
+		var request = 
 			AssetBundleManager.LoadAssetAsync(assetBundleName, assetName, typeof(UnityEngine.Object) );
 		if (request == null)
 		{
@@ -127,14 +123,11 @@ public class LoaderExample : MonoBehaviour
 		var assetObject = request.GetAsset<UnityEngine.Object> ();
 		
 		assetLoadHandler( assetObject ) ;
-		
-
 
 #if ENABLE_NDINFRA_EXAMPLE_LOG
-		// Calculate and display the elapsed time.
-		float elapsed = Time.realtimeSinceStartup - start;
-		Debug.Log(assetName + (null == assetObject ? " was not" : " was")+ " loaded successfully in " + elapsed + " seconds" ) ;
-#endif	
+		LogFinishTime( "Assets " + assetBundleName + (null == assetObject ? " was not" : " was") + " loaded successfully " , string.Empty , start ) ;
+#endif // ENABLE_NDINFRA_EXAMPLE_LOG	
+
 	}
 	
 #if ENABLE_NDINFRA_ONE_BUNDLE
@@ -145,7 +138,7 @@ public class LoaderExample : MonoBehaviour
 		float start = Time.realtimeSinceStartup;
 #endif
 		// Load asset from assetBundle.
-		AssetBundleLoadAssetOperation request = AssetBundleManager.LoadBundleAsync(assetBundleName );
+		var request = AssetBundleManager.LoadBundleAsync(assetBundleName );
 		if (request == null)
 		{
 			onError("assetBundleName is missing." , assetBundleName ) ;
@@ -155,17 +148,15 @@ public class LoaderExample : MonoBehaviour
 		yield return StartCoroutine(request);
 		
 		// Get the asset.
-		var requestBundle = request as ABOneBundleLoader ;
-		var bundleObject = requestBundle.GetBundle() ;
+		var bundleObject = request.GetBundle() ;
 
 		bundleLoadHandler( assetBundleName , bundleObject ) ;
 
 #if ENABLE_NDINFRA_EXAMPLE_LOG
-		// Calculate and display the elapsed time.
-		float elapsed = Time.realtimeSinceStartup - start;
+		LogFinishTime( "Finished loading bundle " , assetBundleName , start ) ;
+#endif // ENABLE_NDINFRA_EXAMPLE_LOG	
 
-		Debug.Log( assetBundleName + " was completed in loading in " + elapsed + " seconds" ) ;
-#endif		
+
 	}
 #endif 
 // ENABLE_NDINFRA_ONE_BUNDLE
@@ -178,11 +169,11 @@ public class LoaderExample : MonoBehaviour
 #if ENABLE_NDINFRA_EXAMPLE_LOG		
 		// This is simply to get the elapsed time for this phase of AssetLoading.
 		float start = Time.realtimeSinceStartup;
-#endif 
-// ENABLE_NDINFRA_EXAMPLE_LOG	
+#endif // ENABLE_NDINFRA_EXAMPLE_LOG	
 
 		// Load level from assetBundle.
-		AssetBundleLoadOperation request = AssetBundleManager.LoadLevelAsync( sceneAssetBundleName , levelName, isAdditive);
+		var request = AssetBundleManager.LoadLevelAsync( sceneAssetBundleName 
+			, levelName, isAdditive);
 		if (request == null)
 		{
 			onError("sceneAssetBundleName is missing." , sceneAssetBundleName ) ;
@@ -194,12 +185,9 @@ public class LoaderExample : MonoBehaviour
 		_CallbackFunc() ;
 
 #if ENABLE_NDINFRA_EXAMPLE_LOG
-		// Calculate and display the elapsed time.
-		float elapsed = Time.realtimeSinceStartup - start;
+		LogFinishTime( "Finished loading scene " , levelName , start ) ;
+#endif // ENABLE_NDINFRA_EXAMPLE_LOG	
 
-		Debug.Log("Finished loading scene " + levelName + " in " + elapsed + " seconds" );
-#endif 
-// ENABLE_NDINFRA_EXAMPLE_LOG		
 	}
 	
 	protected virtual IEnumerator LoadLevelAsync_Delegate (string sceneAssetBundleName 
@@ -208,11 +196,10 @@ public class LoaderExample : MonoBehaviour
 #if ENABLE_NDINFRA_EXAMPLE_LOG		
 		// This is simply to get the elapsed time for this phase of AssetLoading.
 		float start = Time.realtimeSinceStartup;
-#endif 
-// ENABLE_NDINFRA_EXAMPLE_LOG				
+#endif // ENABLE_NDINFRA_EXAMPLE_LOG				
 
 		// Load level from assetBundle.
-		AssetBundleLoadOperation request = AssetBundleManager.LoadLevelAsync( sceneAssetBundleName , levelName, isAdditive);
+		var request = AssetBundleManager.LoadLevelAsync( sceneAssetBundleName , levelName, isAdditive);
 		if (request == null)
 		{
 			onError("sceneAssetBundleName is missing." , sceneAssetBundleName ) ;
@@ -223,15 +210,21 @@ public class LoaderExample : MonoBehaviour
 		levelLoadHandler() ;
 
 #if ENABLE_NDINFRA_EXAMPLE_LOG
-		// Calculate and display the elapsed time.
-		float elapsed = Time.realtimeSinceStartup - start;
-
-		Debug.Log("Finished loading scene " + levelName + " in " + elapsed + " seconds" );
-#endif 
-// ENABLE_NDINFRA_EXAMPLE_LOG				
+		LogFinishTime( "Finished loading scene " , levelName , start ) ;
+#endif // ENABLE_NDINFRA_EXAMPLE_LOG				
 		
 	}
 
+#if ENABLE_NDINFRA_EXAMPLE_LOG
+	void LogFinishTime( string _PreString , string _LevelName , float _StartTime )
+	{
+		// Calculate and display the elapsed time.
+		float elapsed = Time.realtimeSinceStartup - _StartTime;
+
+		Debug.Log( _PreString + _LevelName + " in " + elapsed + " seconds" );
+	}
+#endif // ENABLE_NDINFRA_EXAMPLE_LOG				
+		
 }
 
 }// namespace AssetBundles
