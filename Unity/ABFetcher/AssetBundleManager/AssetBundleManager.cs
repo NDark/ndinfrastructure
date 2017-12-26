@@ -213,10 +213,17 @@ namespace AssetBundles
 				return null;
 		
 			LoadedAssetBundle bundle = null;
+
+#if ENABLE_NDINFRA_CUSTOM
+			string shortKey = RemovePostVarian( assetBundleName ) ;
+			m_LoadedAssetBundles.TryGetValue(shortKey, out bundle);
+#else 
 			m_LoadedAssetBundles.TryGetValue(assetBundleName, out bundle);
+#endif // ENABLE_NDINFRA_CUSTOM
 			if (bundle == null)
 				return null;
-			
+
+
 			// No dependencies are recorded, only the bundle itself is required.
 			string[] dependencies = null;
 			if (!m_Dependencies.TryGetValue(assetBundleName, out dependencies) )
@@ -337,7 +344,19 @@ namespace AssetBundles
 				return assetBundleName;
 			}
 		}
-	
+
+#if ENABLE_NDINFRA_CUSTOM
+		public static string RemovePostVarian( string _Key )
+		{
+			string ret = _Key ;
+			int index = -1;
+			if( -1 != ( index = _Key.IndexOf( "." ) ) )
+			{
+				ret = _Key.Substring( 0 , index ) ;
+			}
+			return ret ;
+		}
+#endif 
 		// Where we actuall call WWW to download the assetBundle.
 		static protected bool LoadAssetBundleInternal (string assetBundleName, bool isLoadingAssetBundleManifest)
 		{
@@ -368,15 +387,16 @@ namespace AssetBundles
 #if ENABLE_NDINFRA_DEBUG_INFO
 			Debug.LogWarning ("LoadAssetBundleInternal url=" + url ) ;
 #endif // ENABLE_NDINFRA_DEBUG_INFO
+			string shortABName = RemovePostVarian(assetBundleName) ;
 
-			bool isVersionExist = m_VersionTable.ContainsKey( assetBundleName ) ;
+			bool isVersionExist = m_VersionTable.ContainsKey( shortABName ) ;
 
 			// check if we need to use local asset bundle
-			bool isLocalExist = m_LocalBundleTable.ContainsKey( assetBundleName ) ;
+			bool isLocalExist = m_LocalBundleTable.ContainsKey( shortABName ) ;
 			bool isUseLocalBundle = ( isLocalExist && !isVersionExist ) 
 							|| ( isLocalExist 
 								 && isVersionExist 
-							     && m_LocalBundleTable[assetBundleName] >= m_VersionTable[assetBundleName] ) ;
+					&& m_LocalBundleTable[shortABName] >= m_VersionTable[shortABName] ) ;
 
 			if( true == isUseLocalBundle )
 			{
@@ -388,7 +408,7 @@ namespace AssetBundles
 
 			if( m_EnableVersionCheck && isVersionExist )
 			{
-				download = WWW.LoadFromCacheOrDownload( url , m_VersionTable[ assetBundleName ] ) ;
+				download = WWW.LoadFromCacheOrDownload( url , m_VersionTable[ shortABName ] ) ;
 			}
 			else
 			{
@@ -514,7 +534,9 @@ namespace AssetBundles
 					}
 				
 					//Debug.Log("Downloading " + keyValue.Key + " is done at frame " + Time.frameCount);
-					m_LoadedAssetBundles.Add(keyValue.Key, 
+					string shortKey = RemovePostVarian(keyValue.Key) ;
+
+					m_LoadedAssetBundles.Add(shortKey, 
 					new LoadedAssetBundle(download.assetBundle 
 #if ENABLE_NDINFRA_CUSTOM
 					                      , keyValue.Key
