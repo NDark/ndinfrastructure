@@ -14,7 +14,7 @@ using System.Collections.Generic;
 public class ABDownloader : ABDownloaderBase
 {
 	public string m_InteractiveABKey = string.Empty ;
-	public string m_InteractiverSceneName = string.Empty ;
+	public string m_InteractiveSceneName = string.Empty ;
 
 	public void SetupBundleSetups( Dictionary<string,ABSetupInfo> _Table )
 	{
@@ -25,6 +25,7 @@ public class ABDownloader : ABDownloaderBase
 		m_ABDirURL = _BundlesDirectoryURL ;
 	}
 
+	// create a list m_Checks
 	protected virtual bool Flow_Initialize_CheckList()
 	{
 		Dictionary<string,ABSetupInfo> table = m_BundleInfos ;
@@ -226,8 +227,6 @@ public class ABDownloader : ABDownloaderBase
 
 	}
 
-
-
 	protected virtual void UpdateProgressUI()
 	{
 		if( 0 != m_TotalRequestedSize )
@@ -239,7 +238,6 @@ public class ABDownloader : ABDownloaderBase
 		}
 		
 	}
-	
 	
 	protected override void Flow_ChangeScene()
 	{
@@ -264,8 +262,6 @@ public class ABDownloader : ABDownloaderBase
 			#else
 			Debug.LogError("DoBundleLoadHandler() Fatal Error, Bundle missed" );
 			#endif
-				
-
 		}
 
 		Debug.Log( "DoBundleLoadHandler=" + _BundleKey  );
@@ -302,7 +298,7 @@ public class ABDownloader : ABDownloaderBase
 	protected void CheckAndLoadInteractiveScene()
 	{
 		if( string.Empty == m_InteractiveABKey 
-		   || string.Empty == m_InteractiverSceneName )
+		   || string.Empty == m_InteractiveSceneName )
 		{
 			Debug.Log( "string.Empty == m_InteractiveABKey" );
 			return ;
@@ -310,7 +306,7 @@ public class ABDownloader : ABDownloaderBase
 		
 		this.levelLoadHandler += DoLevelLoadHandler ;
 		this.CheckAndLoadLevel_Delegate( m_InteractiveABKey 
-			, m_InteractiverSceneName 
+			, m_InteractiveSceneName 
 			, true ) ;
 
 	}
@@ -322,7 +318,6 @@ public class ABDownloader : ABDownloaderBase
 		this.levelLoadHandler -= DoLevelLoadHandler ;
 
 	}
-	
 
 	protected virtual void DoErrorInLoading( string _ErrorMessage , string _Param )
 	{

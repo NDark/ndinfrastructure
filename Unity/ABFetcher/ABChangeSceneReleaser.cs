@@ -10,9 +10,9 @@ using System.Collections.Generic;
 public class ABChangeSceneReleaser : ABDownloader
 {
 	
-	public void SetupOperators( ref List<ABReleaseAction> _Operators )
+	public void SetupOperators( List<ABReleaseAction> _Operators )
 	{
-		m_Operations = _Operators ;
+		m_AssignedAction = _Operators ;
 	}
 
 	public void TryStart()
@@ -57,9 +57,10 @@ public class ABChangeSceneReleaser : ABDownloader
 		}
 	}
 
+	// create m_Checks
 	protected override bool Flow_Initialize_CheckList()
 	{
-		var markers = m_Operations ;
+		var markers = m_AssignedAction ;
 		
 		var iEnum = markers.GetEnumerator() ;
 		while( iEnum.MoveNext() )
@@ -139,7 +140,8 @@ public class ABChangeSceneReleaser : ABDownloader
 			Debug.Log( "false == m_Loader.IsInitialized"  ) ;
 			return ;
 		}
-		
+
+		// unload first
 		if( m_UnloadKeys.Count > 0 )
 		{
 			foreach( var key in m_UnloadKeys )
@@ -149,7 +151,8 @@ public class ABChangeSceneReleaser : ABDownloader
 			}
 			m_UnloadKeys.Clear() ;
 		}
-		
+
+		// load later
 		var iEnum1 = m_Checks.GetEnumerator() ;
 		
 		int completeCount = 0 ;
@@ -220,10 +223,10 @@ public class ABChangeSceneReleaser : ABDownloader
 	}
 	
 	
-	protected List< string > m_LoadKeys = new List<string>() ;
+	protected List< string > m_LoadKeys = new List<string>() ;// will set to m_Checks
 	protected List<string > m_UnloadKeys = new List<string>() ;
 
-	protected List<ABReleaseAction> m_Operations = new List<ABReleaseAction>() ;
+	protected List<ABReleaseAction> m_AssignedAction = new List<ABReleaseAction>() ;// action assigned from outside.
 
 }
 
