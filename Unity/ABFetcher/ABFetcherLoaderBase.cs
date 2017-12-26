@@ -30,6 +30,11 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		s_OverrideBundleFolderURL = _URL ;
 	}
 
+	public bool HasInitRequest()
+	{
+		return (null != m_InitRequest );
+	}
+
 	public bool IsInitialized 
 	{
 		get 
