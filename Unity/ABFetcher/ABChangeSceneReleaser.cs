@@ -186,7 +186,7 @@ public class ABChangeSceneReleaser : ABDownloader
 				{
 					iEnum2.Current.Value.m_CurrentState = CheckState.Requesting ;
 					Debug.Log( "Flow_Checking() TryStartLoadBundle=" + iEnum2.Current.Value.m_BundleKey );
-					this.CheckAndLoadBundle( iEnum2.Current.Value.m_BundleKey ) ;
+					this.CheckAndLoadBundle_Delegate( iEnum2.Current.Value.m_BundleKey ) ;
 					++requestingCount ;
 				}
 			}

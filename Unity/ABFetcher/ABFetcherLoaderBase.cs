@@ -10,19 +10,19 @@ using System.Collections.Generic;
 
 public class ABFetcherLoaderBase : AssetBundles.LoaderExample 
 {
+	// this will be set into AssetBundles.AssetBundleManager.SetSourceAssetBundleURL()
+	// be sure to set this before initialize or load any bundle.
 	public string AssetbundleFolderURL
 	{
 		set { m_AssetbundleFolderURL = value ;}
 		get 
 		{ 
-			
-			return 
-				(s_IsActiveOverrideBundleFolder) ? s_OverrideBundleFolderURL : 
-				m_AssetbundleFolderURL 
-				; 
+			return (s_IsActiveOverrideBundleFolder) 
+					? s_OverrideBundleFolderURL : m_AssetbundleFolderURL ; 
 		}
 	}
 
+	// force to override bundle folder at any cause.
 	public static void ActiveOverrideBundleFolderURL( bool _Active , string _URL )
 	{
 		Debug.LogWarning("ActiveOverrideBundleFolderURL() _URL" + _URL);
@@ -30,6 +30,7 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		s_OverrideBundleFolderURL = _URL ;
 	}
 
+	// check m_InitRequest
 	public bool HasInitRequest()
 	{
 		return (null != m_InitRequest );
@@ -41,24 +42,15 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		{ 
 			return 
 			(
-					
 #if UNITY_EDITOR	
-				AssetBundles.AssetBundleManager.SimulateAssetBundleInEditor
-				||
-#endif		
-				( null == m_InitRequest 
-#if ENABLE_NDINFRA_CUSTOM
-				&& true == IsAssetBundleManifestObjectNotNull() 
-#endif 
-				)
+				AssetBundles.AssetBundleManager.SimulateAssetBundleInEditor ||
+#endif // UNITY_EDITOR
 
-				||
-				( null != m_InitRequest 
-				&& m_InitRequest.IsDone() 
 #if ENABLE_NDINFRA_CUSTOM
-				&& true == IsAssetBundleManifestObjectNotNull()
+				true == IsAssetBundleManifestObjectNotNull() ||
 #endif 
-				)
+				( ( null == m_InitRequest && s_OnceRequestReceived ) 
+				|| ( null != m_InitRequest && m_InitRequest.IsDone() ) )
 			) ;
 		}
 	}
@@ -71,31 +63,38 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 	}
 #endif //
 	
-	// Use this for initialization.
 	IEnumerator Start ()
 	{
-		
+		// don't start automatically, must call StartInitialize() to start initialized
 		yield return null ;
 	}
-	
-	public virtual void CheckAndLoadBundle( string _BundleName )
+
+	public void StartInitialize()
+	{
+		StartCoroutine( Initialize() ) ;
+	}
+
+
+	public virtual void CheckAndLoadBundle_Delegate( string _Key )
 	{
 		string error = string.Empty ;
-		var loadedBundle = AssetBundles.AssetBundleManager.GetLoadedAssetBundle( _BundleName , out error ) ;
+		var loadedBundle = AssetBundles.AssetBundleManager.GetLoadedAssetBundle( _Key , out error ) ;
 		if( null != loadedBundle )
 		{
-			bundleLoadHandler( _BundleName , loadedBundle ) ;
+			bundleLoadHandler( _Key , loadedBundle ) ;
 		}
 		else
 		{
 #if ENABLE_NDINFRA_ONE_BUNDLE
-			StartCoroutine( LoadOneBundle_Delegate( _BundleName ) ) ;
-#endif 
+			StartCoroutine( LoadOneBundle_Delegate( _Key ) ) ;
+#else 
+			Debug.LogError("Not suppurt this method.");
+#endif
 		}
 	}
 	
 	public virtual void CheckAndLoadAsset_Callback(string _BundleName
-											 , string _AssetName
+		, string _AssetName
 		, System.Action<UnityEngine.Object> _CallbackFunc )
 	{
 		string error = string.Empty ;
@@ -110,12 +109,11 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		{
 			StartCoroutine( LoadAssetAsync_Callback( _BundleName , _AssetName , _CallbackFunc ) ) ;
 		}
-		
 	}
 
 	protected virtual IEnumerator LoadAssetFromExistBundle_Callback ( AssetBundles.LoadedAssetBundle _LoadedBundle
-	                                                       , string assetName 
-		, System.Action<UnityEngine.Object> _CallbackFunc)
+		, string assetName 
+		, System.Action<UnityEngine.Object> _CallbackFunc )
 	{
 		// Load asset from assetBundle.
 		var request = _LoadedBundle.m_AssetBundle.LoadAssetAsync<UnityEngine.Object>( assetName ) ;
@@ -127,8 +125,6 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		
 		_CallbackFunc( assetObject ) ;
 	}
-	
-	
 	
 	public virtual void CheckAndLoadAsset_Delegate (string _BundleName, string _AssetName)
 	{
@@ -191,7 +187,7 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		
 	}
 	
-	public virtual void CheckAndLoadLevelAsync(string sceneAssetBundleName 
+	public virtual void CheckAndLoadLevel_Callback (string sceneAssetBundleName 
 	                                        , string levelName
 	                                        , bool isAdditive
 		, System.Action _CallbackFunc)
@@ -215,7 +211,7 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		}
 	}
 	
-	public virtual void CheckAndLoadLevel(string sceneAssetBundleName 
+	public virtual void CheckAndLoadLevel_Delegate(string sceneAssetBundleName 
 		, string levelName
 		, bool isAdditive )
 	{
@@ -230,15 +226,9 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		{
 			StartCoroutine( LoadLevelAsync_Delegate( sceneAssetBundleName , levelName , isAdditive ) ) ;
 		}
-		
-		
 	}
 	
-	public void StartInitialize()
-	{
-		StartCoroutine( Initialize() ) ;
-	}
-	
+
 	// Initialize the downloading url and AssetBundleManifest object.
 	protected override IEnumerator Initialize()
 	{
@@ -253,19 +243,21 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		if( false == this.IsInitialized )
 		{
 			m_InitRequest = AssetBundles.AssetBundleManager.Initialize();
+
 			if (m_InitRequest != null)
 			{
 				yield return StartCoroutine(m_InitRequest);
+				s_OnceRequestReceived = true ;
 			}	
-			
+
 		}
 		
 	}
-	
 	
 	protected string m_AssetbundleFolderURL = string.Empty ;
 	protected AssetBundles.AssetBundleLoadManifestOperation m_InitRequest = null ;	
 
 	protected static bool s_IsActiveOverrideBundleFolder = false ;
 	protected static string s_OverrideBundleFolderURL = string.Empty ;
+	static bool s_OnceRequestReceived = false ;
 }
