@@ -38,7 +38,11 @@ public static class UnityFind
 		if( null != _Obj )
 		{
 			var trans = _Obj.transform.Find( _Name );
-			if( null != trans )
+			if( null == trans )
+			{
+				Debug.LogError( "GameObjectFind() null == trans _Name=" + _Name );
+			}
+			else
 			{
 				return trans.gameObject ;
 			}
