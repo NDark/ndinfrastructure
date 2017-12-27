@@ -31,7 +31,7 @@ public class StateIndexBase<T>
 		}
 	}
 
-	public virtual void ChangeState( T _Next )
+	public virtual void ChangeState( T _Next , float _TimeNow )
 	{
 		if( m_CurrentValue.Equals( _Next ) )
 		{
@@ -43,6 +43,9 @@ public class StateIndexBase<T>
 		}
 		m_NextValue = _Next ;
 		m_IsInTransition = true ;
+		m_ChangeTime = _TimeNow ;
+
+
 	}
 
 	// Update is called once per frame
@@ -60,6 +63,12 @@ public class StateIndexBase<T>
 		}
 		else
 		{
+			m_Transitions.TryGetValue( m_CurrentValue , out currentStateFuncs ) ;
+			if( null != currentStateFuncs )
+			{
+				currentStateFuncs.OnExit() ;
+			}
+
 			m_PreviousValue = m_CurrentValue ;
 			m_CurrentValue = m_NextValue ;
 
@@ -87,6 +96,15 @@ public class StateIndexBase<T>
 		get { return m_NextValue ; } 
 	}
 
+	public float ChangeTime
+	{
+		get { return m_ChangeTime ;}
+	}
+	public float GetElapsedTime( float _TimeNow )
+	{
+		return _TimeNow - m_ChangeTime ;
+	}
+
 	bool m_IsInTransition = false ;
 
 	T m_CurrentValue ;
@@ -94,7 +112,7 @@ public class StateIndexBase<T>
 	T m_NextValue ;
 
 	Dictionary<T,TransitionSet> m_Transitions = new Dictionary<T, TransitionSet>() ;
-
+	float m_ChangeTime = 0.0f ;
 }
 
 public class TransitionSet
