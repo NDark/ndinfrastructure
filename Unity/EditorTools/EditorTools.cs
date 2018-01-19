@@ -35,7 +35,11 @@ public static partial class EditorTools
 {
 	public static void CachingCleanCache()
 	{
+		#if UNITY_2017_1_OR_NEWER
+		if( Caching.ClearCache () )
+		#else
 		if( Caching.CleanCache () )
+		#endif 
 		{
 			Debug.Log("EditorTools::CachingCleanCache() succeed.");
 		}
