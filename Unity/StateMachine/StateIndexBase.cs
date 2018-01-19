@@ -25,8 +25,6 @@ SOFTWARE.
 */
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
 
 public class StateIndexBase<T>
 {
@@ -39,8 +37,9 @@ public class StateIndexBase<T>
 		m_NextValue = m_CurrentValue = m_PreviousValue = _InitState ;
 	}
 
-	public virtual void CallInit( Dictionary<T,TransitionSet>  _Transitions )
+	public virtual void CallInit( T _InitState , Dictionary<T,TransitionSet>  _Transitions )
 	{
+		m_NextValue = m_CurrentValue = m_PreviousValue = _InitState ;
 		m_Transitions = _Transitions ;
 	}
 
