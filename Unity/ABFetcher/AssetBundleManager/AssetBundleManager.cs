@@ -357,7 +357,7 @@ namespace AssetBundles
 #if ENABLE_NDINFRA_CUSTOM
 		public static string AddNAPostVariant( string _Key )
 		{
-			if( !_Key.EndsWith( ".na" ) )
+			if( null != _Key && !_Key.EndsWith( ".na" ) )
 			{
 				_Key += ".na" ;
 			}
