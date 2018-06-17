@@ -80,11 +80,11 @@ An utility for NGUI (need to depend on NGUI plugin)
 
 ## Definition of format 
 
-> Class:DataClass
-> Protocol:DataController
-> int a
-> string b
-> float c
+    Class:DataClass
+    Protocol:DataController
+    int a
+    string b
+    float c
 
 
 # P_CSVToJSON 
