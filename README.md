@@ -2,14 +2,18 @@
 
 An infrastructure libraries for Unity & C#
 
-Clone and checkout specified branch of this repository, use limited functionality of following features.
+## Brief 
 
-Usage: Use git submodule to add submodules by this repository and specified branch name to use.
+Clone and checkout specified branch of this repository, use only limited functionality of following features without checkout entire irrelavant class and libraries.
+
+## Usage
+
+Use git submodule to add submodule from this repository and specify a branch name to use only that feature.
 
 1. F_ABFetcher : Asset Bundle Loader ( official plugin included: https://assetstore.unity.com/packages/tools/utilities/assetbundle-manager-example-scenes-45836 )
     1. Provide a asset bundle loader ABFetcherLoaderBase to initialized asset bundle, and to be called as a loader.
 	1. Provide a loading script ABDownloaderBase with states to check all specified bundle files.
-	1. Inheriting Classes : 
+	1. Inherited Classes : 
 	    1. AssetBundleManager: Official asset bundle manager (static).
 	    1. LoaderExample: use AssetBundleManager, to provide handler after the protected methods are called. ( ex. LoadAssetAsync_Callback )
 		1. ABFetcherLoaderBase: Inherited from LoaderExample, and provide public method to be called by other process.
@@ -72,32 +76,37 @@ An utility for NGUI (need to depend on NGUI plugin)
 1. Export SimpleJSONHelper to parse from SimpleJSON.JSONNode to class.
 1. Export a SeqOperatorSimpleJSON from a collector of SeqOperatorBase
 
-## Definition format 
+## Definition of format 
 
-Class:DataClass
-Protocol:DataController
-int a
-string b
-float c
+> Class:DataClass
+> Protocol:DataController
+> int a
+> string b
+> float c
 
 
 # P_CSVToJSON 
 
+1. Execute file.
 1. Parse csv file to JSON structure array.
 
-# P_GoogleSpreedSheetToJSON
+# P_GoogleSpreedSheetToJSON 
 
-1. Load google spreed sheet to a JSON.
-
+1. (need to logon google account to access file)
+1. Execute file.
+1. Load google spreed sheet to a JSON file.
 
 # P_JSONParsersPerformance
 
+1. Execute file.
 1. Benchmark of performance of several C# compatible JSON methods
 
 # P_LocalConversationManager
 
+1. Execute file.
 1. An implementation of Conversation Manager.
 
-# T_SystemDateTime (need to depend of Unity Test Environment)
+# T_SystemDateTime 
 
-1. A Test of F_SystemDateTime
+1. need to depend on Unity Test Environment
+1. A Test of F_SystemDateTime.
