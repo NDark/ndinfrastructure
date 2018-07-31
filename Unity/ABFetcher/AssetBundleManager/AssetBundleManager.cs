@@ -602,11 +602,10 @@ namespace AssetBundles
 			
 			ABOneBundleLoader operation = null;
 #if UNITY_EDITOR
-
-			assetBundleName = AddNAPostVariant( assetBundleName ) ;
-
 			if (SimulateAssetBundleInEditor)
 			{
+				assetBundleName = AddNAPostVariant( assetBundleName ) ;
+
 				string[] assetPaths = AssetDatabase.GetAssetPathsFromAssetBundle(assetBundleName );
 				if (assetPaths.Length == 0)
 				{
