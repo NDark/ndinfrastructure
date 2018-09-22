@@ -23,6 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+/**
+@file CoordinateTools.cs
+@date 20180922 . add UpdateRectFrom3DWorldPos().
+
+*/
 using UnityEngine;
 
 public static class CoordinateTools 
@@ -43,4 +48,11 @@ public static class CoordinateTools
 		_2DObj.transform.localPosition = local ;
 	}
 
+	public static void UpdateRectFrom3DWorldPos( Camera _3DCamera
+		, Vector3 _3DWorldPos
+		, RectTransform _2DRect )
+	{
+		Vector3 screen = _3DCamera.WorldToScreenPoint( _3DWorldPos ) ;
+		_2DRect.position = screen;
+	}
 }
