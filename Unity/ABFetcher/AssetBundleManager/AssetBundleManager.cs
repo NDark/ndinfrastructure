@@ -357,7 +357,7 @@ namespace AssetBundles
 #if ENABLE_NDINFRA_CUSTOM
 		public static string AddNAPostVariant( string _Key )
 		{
-			if( !_Key.EndsWith( ".na" ) )
+			if( null != _Key && !_Key.EndsWith( ".na" ) )
 			{
 				_Key += ".na" ;
 			}
@@ -406,12 +406,18 @@ namespace AssetBundles
 			// assetBundleName is with variant extension.
 
 #if ENABLE_NDINFRA_DEBUG_INFO
-			Debug.LogWarning ("LoadAssetBundleInternal url=" + url ) ;
+			Debug.LogWarning ("LoadAssetBundleInternal input and assemble url=" + url ) ;
 #endif // ENABLE_NDINFRA_DEBUG_INFO
 
 			string keyWoVariant = RemovePostVariant(assetBundleName) ;
 
 			bool isVersionExist = m_VersionTable.ContainsKey( keyWoVariant ) ;
+			int targetVersion = 0 ;
+			if(isVersionExist)
+			{
+				targetVersion = m_VersionTable[ keyWoVariant ];	
+			}
+
 
 			// check if we need to use local asset bundle
 			bool isLocalExist = m_LocalBundleTable.ContainsKey( keyWoVariant ) ;
@@ -421,6 +427,7 @@ namespace AssetBundles
 
 			if( true == isUseLocalBundle )
 			{
+				targetVersion = m_LocalBundleTable[keyWoVariant] ;
 				// change path to streaming assets path
 				url = GetStreamingAssetsPath() + "/AssetBundles/" + Utility.GetPlatformName() + "/"+ assetBundleName ;
 #if ENABLE_NDINFRA_DEBUG_INFO
@@ -432,7 +439,7 @@ namespace AssetBundles
 			if( m_EnableVersionCheck && isVersionExist )
 			{
 				// url was used here
-				download = WWW.LoadFromCacheOrDownload( url , m_VersionTable[ keyWoVariant ] ) ;
+				download = WWW.LoadFromCacheOrDownload( url , targetVersion ) ;
 			}
 			else
 			{
@@ -602,11 +609,10 @@ namespace AssetBundles
 			
 			ABOneBundleLoader operation = null;
 #if UNITY_EDITOR
-
-			assetBundleName = AddNAPostVariant( assetBundleName ) ;
-
 			if (SimulateAssetBundleInEditor)
 			{
+				assetBundleName = AddNAPostVariant( assetBundleName ) ;
+
 				string[] assetPaths = AssetDatabase.GetAssetPathsFromAssetBundle(assetBundleName );
 				if (assetPaths.Length == 0)
 				{

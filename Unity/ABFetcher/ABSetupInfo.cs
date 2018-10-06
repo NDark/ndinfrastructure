@@ -31,10 +31,11 @@ SOFTWARE.
 */
 using UnityEngine;
 
+[System.Serializable]
 public class ABSetupInfo
 {
-	public string Key { get; set; }
-	public int Version { get; set; }
+	public string Key = string.Empty ;
+	public int Version = 0 ;
 	public string ReleaseTiming = string.Empty ;
 
 	public void DEBUG()
