@@ -176,7 +176,8 @@ namespace AssetBundles
 			*/
 			else if (Application.platform == RuntimePlatform.IPhonePlayer )
 				return "file://" + Application.streamingAssetsPath;
-			
+			else if (Application.platform == RuntimePlatform.WebGLPlayer )
+				return Application.streamingAssetsPath;
 			else if (Application.isMobilePlatform || Application.isConsolePlatform)
 				return Application.streamingAssetsPath;
 			else // For standalone player.
