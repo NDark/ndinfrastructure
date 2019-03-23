@@ -176,7 +176,8 @@ namespace AssetBundles
 			*/
 			else if (Application.platform == RuntimePlatform.IPhonePlayer )
 				return "file://" + Application.streamingAssetsPath;
-			
+			else if (Application.platform == RuntimePlatform.WebGLPlayer )
+				return Application.streamingAssetsPath;
 			else if (Application.isMobilePlatform || Application.isConsolePlatform)
 				return Application.streamingAssetsPath;
 			else // For standalone player.
@@ -563,10 +564,13 @@ namespace AssetBundles
 						keysToRemove.Add(keyValue.Key);
 						continue;
 					}
-				
-					//Debug.Log("Downloading " + keyValue.Key + " is done at frame " + Time.frameCount);
-					string shortKey = RemovePostVariant(keyValue.Key) ;
 
+
+					//Debug.Log("Downloading " + keyValue.Key + " is done at frame " + Time.frameCount);
+					string shortKey = keyValue.Key ;
+#if ENABLE_NDINFRA_CUSTOM
+					shortKey = RemovePostVariant(keyValue.Key) ;
+#endif 
 					m_LoadedAssetBundles.Add(shortKey, 
 					new LoadedAssetBundle(download.assetBundle 
 #if ENABLE_NDINFRA_CUSTOM
@@ -647,11 +651,12 @@ namespace AssetBundles
 #endif // ENABLE_NDINFRA_DEBUG_INFO
 
 			AssetBundleLoadAssetOperation operation = null;
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 			if (SimulateAssetBundleInEditor)
 			{
+#if ENABLE_NDINFRA_CUSTOM			
 				assetBundleName = AddNAPostVariant( assetBundleName ) ;
-
+#endif 
 				string[] assetPaths = AssetDatabase.GetAssetPathsFromAssetBundleAndAssetName(assetBundleName, assetName);
 				if (assetPaths.Length == 0)
 				{
@@ -664,7 +669,7 @@ namespace AssetBundles
 				operation = new AssetBundleLoadAssetOperationSimulation (target);
 			}
 			else
-	#endif
+#endif
 			{
 				assetBundleName = RemapVariantName (assetBundleName);
 				LoadAssetBundle (assetBundleName);
