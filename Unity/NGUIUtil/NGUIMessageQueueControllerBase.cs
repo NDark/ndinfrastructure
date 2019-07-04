@@ -105,7 +105,7 @@ public class NGUIMessageQueueControllerBase : MonoBehaviour
 		
 	}
 
-	bool m_InAnimation = false ;
-	LinkedList<string> m_MessageQueue = new LinkedList<string>() ;
+	protected bool m_InAnimation = false ;
+	protected LinkedList<string> m_MessageQueue = new LinkedList<string>() ;
 
 }
