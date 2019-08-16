@@ -100,12 +100,23 @@ public class NGUIMessageQueueControllerBase : MonoBehaviour
 
 	}
 
+	public virtual void TrySetupStructure() 
+	{
+		if (!m_Initializaed)
+		{
+			SetupStructure();
+		}
+	}
+
 	protected virtual void SetupStructure() 
 	{
-		
+		m_Initializaed = true;
 	}
 
 	protected bool m_InAnimation = false ;
 	protected LinkedList<string> m_MessageQueue = new LinkedList<string>() ;
+
+	public bool IsInitialized { get { return m_Initializaed; } }
+	protected bool m_Initializaed = false ;
 
 }
