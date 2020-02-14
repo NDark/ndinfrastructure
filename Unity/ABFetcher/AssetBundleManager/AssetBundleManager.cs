@@ -485,7 +485,15 @@ namespace AssetBundles
 				dependencies[i] = RemapVariantName (dependencies[i]);
 				
 			// Record and load all dependencies.
+
+#if ENABLE_NDINFRA_CUSTOM
+			string shortKey = RemovePostVariant(assetBundleName) ;
+			m_Dependencies.Add(shortKey, dependencies);
+			Log(LogType.Info, shortKey + " has been added to m_Dependencies[]");
+#else 
 			m_Dependencies.Add(assetBundleName, dependencies);
+#endif
+
 			for (int i=0;i<dependencies.Length;i++)
 				LoadAssetBundleInternal(dependencies[i], false);
 		}
