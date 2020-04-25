@@ -429,6 +429,7 @@ namespace AssetBundles
 			if( true == isUseLocalBundle )
 			{
 				targetVersion = m_LocalBundleTable[keyWoVariant] ;
+				isVersionExist = true ;
 				// change path to streaming assets path
 				url = GetStreamingAssetsPath() + "/AssetBundles/" + Utility.GetPlatformName() + "/"+ assetBundleName ;
 #if ENABLE_NDINFRA_DEBUG_INFO
