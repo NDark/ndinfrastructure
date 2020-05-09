@@ -516,6 +516,27 @@ namespace AssetBundles
 			//Debug.Log(m_LoadedAssetBundles.Count + " assetbundle(s) in memory after unloading " + assetBundleName);
 		}
 	
+#if ENABLE_NDINFRA_CUSTOM
+		// Unload assetbundle and its dependencies.
+		static public void ForceClearAllAssetBundls()
+		{
+#if UNITY_EDITOR
+			// If we're in Editor simulation mode, we don't have to load the manifest assetBundle.
+			if (SimulateAssetBundleInEditor)
+				return;
+#endif
+			
+			foreach (var bundle in m_LoadedAssetBundles.Values) 
+			{
+				bundle.m_AssetBundle.Unload(false);
+			}
+
+			m_LoadedAssetBundles.Clear();
+			m_Dependencies.Clear ();
+
+		}
+#endif
+
 		static protected void UnloadDependencies(string assetBundleName)
 		{
 			string[] dependencies = null;
