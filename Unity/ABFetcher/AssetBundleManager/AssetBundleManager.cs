@@ -489,7 +489,14 @@ namespace AssetBundles
 
 #if ENABLE_NDINFRA_CUSTOM
 			string shortKey = RemovePostVariant(assetBundleName) ;
-			m_Dependencies.Add(shortKey, dependencies);
+			if( m_Dependencies.ContainsKey(shortKey) )
+			{
+				Log(LogType.Warning, shortKey + " existed in m_Dependencies[]. No need to add again.");
+			}
+			else 
+			{
+				m_Dependencies.Add(shortKey, dependencies);
+			}
 			Log(LogType.Info, shortKey + " has been added to m_Dependencies[]");
 #else 
 			m_Dependencies.Add(assetBundleName, dependencies);
