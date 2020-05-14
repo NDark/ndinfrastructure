@@ -247,7 +247,16 @@ namespace AssetBundles
 	
 				// Wait all the dependent assetBundles being loaded.
 				LoadedAssetBundle dependentBundle;
+
+				Debug.Log("dependency" + dependency);
+#if ENABLE_NDINFRA_CUSTOM
+				// assetBundleName may be with variant extention, but m_LoadedAssetBundles doesn't
+				string shortKeyDepency = RemovePostVariant( dependency ) ;
+				m_LoadedAssetBundles.TryGetValue(shortKeyDepency, out dependentBundle);
+#else 
 				m_LoadedAssetBundles.TryGetValue(dependency, out dependentBundle);
+#endif // ENABLE_NDINFRA_CUSTOM
+
 				if (dependentBundle == null)
 					return null;
 			}
@@ -386,7 +395,15 @@ namespace AssetBundles
 
 			// Already loaded.
 			LoadedAssetBundle bundle = null;
+
+#if ENABLE_NDINFRA_CUSTOM
+			// assetBundleName may be with variant extention, but m_LoadedAssetBundles doesn't
+			string shortKey = RemovePostVariant( assetBundleName ) ;
+			m_LoadedAssetBundles.TryGetValue(shortKey, out bundle);
+#else 
 			m_LoadedAssetBundles.TryGetValue(assetBundleName, out bundle);
+#endif // ENABLE_NDINFRA_CUSTOM
+
 			if (bundle != null)
 			{
 				bundle.m_ReferencedCount++;
