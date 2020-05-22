@@ -163,7 +163,18 @@ namespace AssetBundles
 		
 	
 		#endif
-	
+		
+#if ENABLE_NDINFRA_CUSTOM
+		public static string FetchStreamingAssetsPath()
+		{
+			return GetStreamingAssetsPath ();
+		}
+		public static void ClearDownloadingError()
+		{
+			m_DownloadingErrors.Clear ();
+		}
+#endif
+
 		private static string GetStreamingAssetsPath()
 		{
 			if (Application.isEditor)
@@ -248,7 +259,6 @@ namespace AssetBundles
 				// Wait all the dependent assetBundles being loaded.
 				LoadedAssetBundle dependentBundle;
 
-				Debug.Log("dependency" + dependency);
 #if ENABLE_NDINFRA_CUSTOM
 				// assetBundleName may be with variant extention, but m_LoadedAssetBundles doesn't
 				string shortKeyDepency = RemovePostVariant( dependency ) ;
