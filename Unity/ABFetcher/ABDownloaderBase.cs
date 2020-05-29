@@ -126,7 +126,7 @@ public class ABDownloaderBase : ABFetcherLoaderBase
 		this.State = ProgressState.End ;
 	}
 	
-	protected virtual void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle )
+	protected virtual void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle , string [] pathArray )
 	{
 		// UnityEngine.Debug.Log("DoBundleLoadHandler() _BundleKey=" + _BundleKey ) ;
 

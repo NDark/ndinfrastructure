@@ -688,9 +688,9 @@ namespace AssetBundles
 					return null;
 				}
 
-				// @TODO: Now we only get the main object from the first asset. Should consider type also.
-				Object target = AssetDatabase.LoadMainAssetAtPath(assetPaths[0]);
-				operation = new ABOneBundleLoaderSimulation ( assetBundleName , target);
+				// Object target = AssetDatabase.LoadMainAssetAtPath(assetPaths[0]);
+
+				operation = new ABOneBundleLoaderSimulation ( assetBundleName , assetPaths );
 
 			}
 			else

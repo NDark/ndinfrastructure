@@ -275,7 +275,7 @@ public class ABDownloader : ABDownloaderBase
 		this.State = ProgressState.End ;
 	}
 	
-	protected override void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle )
+	protected override void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle , string [] pathArray )
 	{
 		if( null == _Bundle )
 		{

@@ -235,7 +235,7 @@ public class ABChangeSceneReleaser : ABDownloader
 		this.State = ProgressState.End ;
 	}
 	
-	protected override void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle )
+	protected override void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle , string [] pathArray )
 	{
 		Debug.Log( "DoBundleLoadHandler() " + _BundleKey  ) ;
 

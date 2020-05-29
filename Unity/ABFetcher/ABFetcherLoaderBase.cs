@@ -106,7 +106,7 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		var loadedBundle = AssetBundles.AssetBundleManager.GetLoadedAssetBundle( _Key , out error ) ;
 		if( null != loadedBundle )
 		{
-			bundleLoadHandler( _Key , loadedBundle ) ;
+			bundleLoadHandler( _Key , loadedBundle , null ) ;
 		}
 		else
 		{
