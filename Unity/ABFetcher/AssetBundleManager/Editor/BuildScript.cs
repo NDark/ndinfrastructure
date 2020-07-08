@@ -118,8 +118,10 @@ namespace AssetBundles
 			case BuildTarget.StandaloneOSXIntel64:
 			case BuildTarget.StandaloneOSXUniversal:
 				return "/test.app";
+#if !UNITY_2017_1_OR_NEWER
 			case BuildTarget.WebPlayer:
 			case BuildTarget.WebPlayerStreamed:
+#endif				
 			case BuildTarget.WebGL:
 				return "";
 				// Add more build targets for your own.
