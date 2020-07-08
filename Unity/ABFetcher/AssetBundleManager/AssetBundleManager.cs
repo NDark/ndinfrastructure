@@ -179,8 +179,13 @@ namespace AssetBundles
 		{
 			if (Application.isEditor)
 				return "file://" +  System.Environment.CurrentDirectory.Replace("\\", "/"); // Use the build output folder directly.
+			
+#if UNITY_2017_1_OR_NEWER
+
+#else
 			else if (Application.isWebPlayer)
 				return System.IO.Path.GetDirectoryName(Application.absoluteURL).Replace("\\", "/")+ "/StreamingAssets";
+#endif 
 
 			/*
 			http://answers.unity3d.com/questions/525737/cant-get-streaming-assets-folder-to-work-with-the.html
