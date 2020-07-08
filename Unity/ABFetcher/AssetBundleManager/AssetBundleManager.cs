@@ -180,9 +180,7 @@ namespace AssetBundles
 			if (Application.isEditor)
 				return "file://" +  System.Environment.CurrentDirectory.Replace("\\", "/"); // Use the build output folder directly.
 			
-#if UNITY_2017_1_OR_NEWER
-
-#else
+#if !UNITY_2017_1_OR_NEWER
 			else if (Application.isWebPlayer)
 				return System.IO.Path.GetDirectoryName(Application.absoluteURL).Replace("\\", "/")+ "/StreamingAssets";
 #endif 
