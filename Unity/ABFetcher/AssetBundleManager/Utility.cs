@@ -38,8 +38,12 @@ namespace AssetBundles
 			case BuildTarget.StandaloneWindows:
 			case BuildTarget.StandaloneWindows64:
 				return "Windows";
+
+#if !UNITY_2017_1_OR_NEWER
 			case BuildTarget.StandaloneOSXIntel:
 			case BuildTarget.StandaloneOSXIntel64:
+				return "OSX";
+#endif 
 			case BuildTarget.StandaloneOSX:
 				return "OSX";
 				// Add more build targets for your own.

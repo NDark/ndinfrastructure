@@ -114,8 +114,11 @@ namespace AssetBundles
 			case BuildTarget.StandaloneWindows:
 			case BuildTarget.StandaloneWindows64:
 				return "/test.exe";
+#if !UNITY_2017_1_OR_NEWER
 			case BuildTarget.StandaloneOSXIntel:
 			case BuildTarget.StandaloneOSXIntel64:
+				return "/test.app";
+#endif				
 			case BuildTarget.StandaloneOSX:
 				return "/test.app";
 #if !UNITY_2017_1_OR_NEWER
