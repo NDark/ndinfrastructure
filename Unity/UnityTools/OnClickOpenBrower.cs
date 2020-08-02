@@ -30,6 +30,8 @@ SOFTWARE.
 @date 20170620 by NDark
 . add class method OpenBrowerWithSpecifiedTabName(), OpenBrowerNewTab(), OpenBrowerAtSelf(), RefreshBrower()
 
+https://answers.unity.com/questions/1571701/open-new-window-from-webgll-with-unity-2018.html
+
 */
 using UnityEngine;
 
