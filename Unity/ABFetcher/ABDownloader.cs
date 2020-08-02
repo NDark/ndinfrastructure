@@ -75,11 +75,7 @@ public class ABDownloader : ABDownloaderBase
 #if ENABLE_NDINFRA_CUSTOM
 			AssetBundles.AssetBundleManager.m_VersionTable.Add( bundleKey , iEnum.Current.Value.Version ) ;
 #endif 			
-			string url = AssetBundles.AssetBundleManager.BaseDownloadingURL + bundleKey ;
-
-			if( iEnum.Current.Value.ReleaseTiming != ABReleaseTiming.Expired.ToString()
-			   && false == Caching.IsVersionCached( url , iEnum.Current.Value.Version )
-			)
+			if( iEnum.Current.Value.ReleaseTiming != ABReleaseTiming.Expired.ToString() )
 			{
 				addItem = new CheckItem() ;
 				addItem.m_BundleKey = iEnum.Current.Value.Key ;
