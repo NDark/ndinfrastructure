@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2019 NDark
+Copyright (c) 2017 - 2020 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -235,7 +235,7 @@ public class ABChangeSceneReleaser : ABDownloader
 		this.State = ProgressState.End ;
 	}
 	
-	protected override void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle )
+	protected override void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle , string [] pathArray )
 	{
 		Debug.Log( "DoBundleLoadHandler() " + _BundleKey  ) ;
 

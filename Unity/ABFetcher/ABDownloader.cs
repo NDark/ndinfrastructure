@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2019 NDark
+Copyright (c) 2017 - 2020 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -75,11 +75,7 @@ public class ABDownloader : ABDownloaderBase
 #if ENABLE_NDINFRA_CUSTOM
 			AssetBundles.AssetBundleManager.m_VersionTable.Add( bundleKey , iEnum.Current.Value.Version ) ;
 #endif 			
-			string url = AssetBundles.AssetBundleManager.BaseDownloadingURL + bundleKey ;
-
-			if( iEnum.Current.Value.ReleaseTiming != ABReleaseTiming.Expired.ToString()
-			   && false == Caching.IsVersionCached( url , iEnum.Current.Value.Version )
-			)
+			if( iEnum.Current.Value.ReleaseTiming != ABReleaseTiming.Expired.ToString() )
 			{
 				addItem = new CheckItem() ;
 				addItem.m_BundleKey = iEnum.Current.Value.Key ;
@@ -275,7 +271,7 @@ public class ABDownloader : ABDownloaderBase
 		this.State = ProgressState.End ;
 	}
 	
-	protected override void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle )
+	protected override void DoBundleLoadHandler( string _BundleKey , AssetBundles.LoadedAssetBundle _Bundle , string [] pathArray )
 	{
 		if( null == _Bundle )
 		{

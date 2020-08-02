@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2019 NDark
+Copyright (c) 2017 - 2020 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -106,7 +106,7 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		var loadedBundle = AssetBundles.AssetBundleManager.GetLoadedAssetBundle( _Key , out error ) ;
 		if( null != loadedBundle )
 		{
-			bundleLoadHandler( _Key , loadedBundle ) ;
+			bundleLoadHandler( _Key , loadedBundle , null ) ;
 		}
 		else
 		{

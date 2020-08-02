@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2019 NDark
+Copyright (c) 2017 - 2020 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,8 @@ namespace AssetBundles
 
 public class LoaderExample : MonoBehaviour 
 {
-	public System.Action<string /*key*/ ,LoadedAssetBundle> bundleLoadHandler = new System.Action<string,LoadedAssetBundle>( (s0,b1) => {} ) ;
+	public System.Action<string /*key*/ ,LoadedAssetBundle , string [] > bundleLoadHandler 
+			= new System.Action<string,LoadedAssetBundle, string [] >( (s0,b1,sa2) => {} ) ;
 	public System.Action<UnityEngine.Object> assetLoadHandler = new System.Action<UnityEngine.Object>( (o1) => {} ) ;
 	public System.Action levelLoadHandler = new System.Action( () => {} ) ;
 
@@ -175,7 +176,9 @@ public class LoaderExample : MonoBehaviour
 		// Get the asset.
 		var bundleObject = request.GetBundle() ;
 
-		bundleLoadHandler( assetBundleName , bundleObject ) ;
+		string[] pathArray = request.GetSimulatPathArray ();
+
+		bundleLoadHandler( assetBundleName , bundleObject , pathArray ) ;
 
 #if ENABLE_NDINFRA_EXAMPLE_LOG
 		LogFinishTime( "Finished loading bundle " , assetBundleName , start ) ;

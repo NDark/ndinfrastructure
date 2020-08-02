@@ -163,13 +163,27 @@ namespace AssetBundles
 		
 	
 		#endif
-	
+		
+#if ENABLE_NDINFRA_CUSTOM
+		public static string FetchStreamingAssetsPath()
+		{
+			return GetStreamingAssetsPath ();
+		}
+		public static void ClearDownloadingError()
+		{
+			m_DownloadingErrors.Clear ();
+		}
+#endif
+
 		private static string GetStreamingAssetsPath()
 		{
 			if (Application.isEditor)
 				return "file://" +  System.Environment.CurrentDirectory.Replace("\\", "/"); // Use the build output folder directly.
+			
+#if !UNITY_2017_1_OR_NEWER
 			else if (Application.isWebPlayer)
 				return System.IO.Path.GetDirectoryName(Application.absoluteURL).Replace("\\", "/")+ "/StreamingAssets";
+#endif 
 
 			/*
 			http://answers.unity3d.com/questions/525737/cant-get-streaming-assets-folder-to-work-with-the.html
@@ -247,7 +261,15 @@ namespace AssetBundles
 	
 				// Wait all the dependent assetBundles being loaded.
 				LoadedAssetBundle dependentBundle;
+
+#if ENABLE_NDINFRA_CUSTOM
+				// assetBundleName may be with variant extention, but m_LoadedAssetBundles doesn't
+				string shortKeyDepency = RemovePostVariant( dependency ) ;
+				m_LoadedAssetBundles.TryGetValue(shortKeyDepency, out dependentBundle);
+#else 
 				m_LoadedAssetBundles.TryGetValue(dependency, out dependentBundle);
+#endif // ENABLE_NDINFRA_CUSTOM
+
 				if (dependentBundle == null)
 					return null;
 			}
@@ -386,7 +408,15 @@ namespace AssetBundles
 
 			// Already loaded.
 			LoadedAssetBundle bundle = null;
+
+#if ENABLE_NDINFRA_CUSTOM
+			// assetBundleName may be with variant extention, but m_LoadedAssetBundles doesn't
+			string shortKey = RemovePostVariant( assetBundleName ) ;
+			m_LoadedAssetBundles.TryGetValue(shortKey, out bundle);
+#else 
 			m_LoadedAssetBundles.TryGetValue(assetBundleName, out bundle);
+#endif // ENABLE_NDINFRA_CUSTOM
+
 			if (bundle != null)
 			{
 				bundle.m_ReferencedCount++;
@@ -429,6 +459,7 @@ namespace AssetBundles
 			if( true == isUseLocalBundle )
 			{
 				targetVersion = m_LocalBundleTable[keyWoVariant] ;
+				isVersionExist = true ;
 				// change path to streaming assets path
 				url = GetStreamingAssetsPath() + "/AssetBundles/" + Utility.GetPlatformName() + "/"+ assetBundleName ;
 #if ENABLE_NDINFRA_DEBUG_INFO
@@ -485,7 +516,22 @@ namespace AssetBundles
 				dependencies[i] = RemapVariantName (dependencies[i]);
 				
 			// Record and load all dependencies.
+
+#if ENABLE_NDINFRA_CUSTOM
+			string shortKey = RemovePostVariant(assetBundleName) ;
+			if( m_Dependencies.ContainsKey(shortKey) )
+			{
+				Log(LogType.Warning, shortKey + " existed in m_Dependencies[]. No need to add again.");
+			}
+			else 
+			{
+				m_Dependencies.Add(shortKey, dependencies);
+			}
+			Log(LogType.Info, shortKey + " has been added to m_Dependencies[]");
+#else 
 			m_Dependencies.Add(assetBundleName, dependencies);
+#endif
+
 			for (int i=0;i<dependencies.Length;i++)
 				LoadAssetBundleInternal(dependencies[i], false);
 		}
@@ -507,6 +553,27 @@ namespace AssetBundles
 			//Debug.Log(m_LoadedAssetBundles.Count + " assetbundle(s) in memory after unloading " + assetBundleName);
 		}
 	
+#if ENABLE_NDINFRA_CUSTOM
+		// Unload assetbundle and its dependencies.
+		static public void ForceClearAllAssetBundls()
+		{
+#if UNITY_EDITOR
+			// If we're in Editor simulation mode, we don't have to load the manifest assetBundle.
+			if (SimulateAssetBundleInEditor)
+				return;
+#endif
+			
+			foreach (var bundle in m_LoadedAssetBundles.Values) 
+			{
+				bundle.m_AssetBundle.Unload(false);
+			}
+
+			m_LoadedAssetBundles.Clear();
+			m_Dependencies.Clear ();
+
+		}
+#endif
+
 		static protected void UnloadDependencies(string assetBundleName)
 		{
 			string[] dependencies = null;
@@ -624,9 +691,9 @@ namespace AssetBundles
 					return null;
 				}
 
-				// @TODO: Now we only get the main object from the first asset. Should consider type also.
-				Object target = AssetDatabase.LoadMainAssetAtPath(assetPaths[0]);
-				operation = new ABOneBundleLoaderSimulation ( assetBundleName , target);
+				// Object target = AssetDatabase.LoadMainAssetAtPath(assetPaths[0]);
+
+				operation = new ABOneBundleLoaderSimulation ( assetBundleName , assetPaths );
 
 			}
 			else
