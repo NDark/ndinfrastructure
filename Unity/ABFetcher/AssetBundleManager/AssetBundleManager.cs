@@ -336,6 +336,12 @@ namespace AssetBundles
 		// Remaps the asset bundle name to the best fitting asset bundle variant.
 		static protected string RemapVariantName(string assetBundleName)
 		{
+			if (m_AssetBundleManifest == null)
+			{
+				Debug.LogError("RemapVariantName() Please initialize AssetBundleManifest by calling AssetBundleManager.Initialize()");
+				return string.Empty ;
+			}
+
 			string[] bundlesWithVariant = m_AssetBundleManifest.GetAllAssetBundlesWithVariant();
 
 			string[] split = assetBundleName.Split('.');
