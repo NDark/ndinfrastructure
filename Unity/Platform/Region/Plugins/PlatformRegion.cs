@@ -39,7 +39,7 @@ public static class PlatformRegion
 		string ret = string.Empty;
 		SystemLanguage unitySystemLangauge = Application.systemLanguage;
 		ret = unitySystemLangauge.ToString();
-		Debug.Log("CheckApplicationSystemLanguage() ret=" + ret);
+		// Debug.Log("CheckApplicationSystemLanguage() ret=" + ret);
 		return ret ;
 	}
 
