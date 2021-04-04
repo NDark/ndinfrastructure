@@ -29,6 +29,7 @@ SOFTWARE.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 public static class PlatformRegion
 {
@@ -82,8 +83,7 @@ public static class PlatformRegion
 	public static string CurrentiOSLanguage()
 	{
 		string ret = CurIOSLang();
-		
-		Debug.LogWarning("CurrentAndroidLanguage() result" + result);
+		Debug.LogWarning("CurrentAndroidLanguage() ret" + ret);
 		return ret;
 	}
 #endif
