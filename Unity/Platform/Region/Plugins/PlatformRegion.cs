@@ -55,7 +55,7 @@ public static class PlatformRegion
 				{
 					if (locale != null)
 					{
-						result = locale.Call<string>("getLanguage") + "_" + locale.Call<string>("getDefault");
+						result = locale.Call<string>("getLanguage") + "_" + locale.Call<string>("getCountry");
 						Debug.Log("CurrentAndroidLanguage() Android lang: " + result);
 					}
 					else
