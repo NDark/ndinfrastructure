@@ -46,6 +46,7 @@ public static class PlatformRegion
 #if UNITY_ANDROID
 	public static string CurrentAndroidLanguage()
 	{
+		// https://nowjava.com/docs/java-api-11/java.base/java/util/Locale.html
 		string result = "";
 		using (AndroidJavaClass cls = new AndroidJavaClass("java.util.Locale"))
 		{
@@ -55,7 +56,7 @@ public static class PlatformRegion
 				{
 					if (locale != null)
 					{
-						result = locale.Call<string>("getLanguage") + "_" + locale.Call<string>("getCountry");
+						result = locale.Call<string>("toLanguageTag");
 						Debug.Log("CurrentAndroidLanguage() Android lang: " + result);
 					}
 					else
