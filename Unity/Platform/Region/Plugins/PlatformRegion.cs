@@ -84,7 +84,7 @@ public static class PlatformRegion
 	public static string CurrentiOSLanguage()
 	{
 		string ret = CurIOSLang();
-		Debug.LogWarning("CurrentAndroidLanguage() ret" + ret);
+		Debug.LogWarning("CurrentiOSLanguage() ret=" + ret);
 		return ret;
 	}
 #endif
