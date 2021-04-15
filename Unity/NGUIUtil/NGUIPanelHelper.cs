@@ -83,6 +83,29 @@ public class NGUIPanelHelper : MonoBehaviour
 		m_CloseButton = UnityFind.ComponentFind<UIButton>( this.transform , _Path ) ;
 	}
 
+	public void CheckEnoughScrollViewListItems(
+		List<NGUIUICollector> inputList
+		, int dataCount 
+		, GameObject parent 
+		, GameObject prefab 
+		
+		)
+	{
+		for (int i = 0; i < dataCount; ++i)
+		{
+			if (i >= inputList.Count)
+			{
+				GameObject addObj = NGUITools.AddChild(parent, prefab);
+				if (null != addObj)
+				{
+					NGUIUICollector collector = new NGUIUICollector();
+					collector.SetupObj(addObj);
+					inputList.Add(collector);
+				}
+			}
+		}
+	}
+
 	NGUIUICollector m_UIs = new NGUIUICollector() ;
 	UIButton m_CloseButton = null ;
 	UIPanel m_Panel = null ;
