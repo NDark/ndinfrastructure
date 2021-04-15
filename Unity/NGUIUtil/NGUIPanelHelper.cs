@@ -80,7 +80,21 @@ public class NGUIPanelHelper : MonoBehaviour
 
 	public void SetupCloseButton( string _Path )
 	{
-		m_CloseButton = UnityFind.ComponentFind<UIButton>( this.transform , _Path ) ;
+		var trans = this.transform.Find(_Path);
+		if (null == trans)
+		{
+			Debug.LogError("SetupCloseButton() null == trans _Path=" + _Path);
+			return;
+		}
+
+		var c = trans.gameObject.GetComponent<UIButton>();
+		if (null == c)
+		{
+			Debug.LogError("SetupCloseButton() null == component _Path=" + _Path);
+			return;
+		}
+		m_CloseButton = c;
+
 	}
 
 	public void CheckEnoughScrollViewListItems(
