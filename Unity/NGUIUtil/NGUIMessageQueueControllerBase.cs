@@ -29,6 +29,10 @@ using UnityEngine;
 
 public class NGUIMessageQueueControllerBase : MonoBehaviour 
 {
+	public void ClearQueue()
+	{
+		m_MessageQueue.Clear();
+	}
 
 	public virtual string CurrentText
 	{
