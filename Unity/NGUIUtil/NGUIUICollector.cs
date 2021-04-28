@@ -136,7 +136,7 @@ public class NGUIUICollector {
 		List<UILabel> labels = GetLabels( _Key ) ;
 		if( null == labels )
 		{
-			Debug.LogWarning("null == labels");
+			Debug.LogWarning("null == labels" + _Key);
 			return ;
 		}
 		
