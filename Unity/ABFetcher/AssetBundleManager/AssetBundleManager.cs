@@ -336,6 +336,12 @@ namespace AssetBundles
 		// Remaps the asset bundle name to the best fitting asset bundle variant.
 		static protected string RemapVariantName(string assetBundleName)
 		{
+			if (m_AssetBundleManifest == null)
+			{
+				Debug.LogError("RemapVariantName() Please initialize AssetBundleManifest by calling AssetBundleManager.Initialize()");
+				return string.Empty ;
+			}
+
 			string[] bundlesWithVariant = m_AssetBundleManifest.GetAllAssetBundlesWithVariant();
 
 			string[] split = assetBundleName.Split('.');
@@ -616,7 +622,13 @@ namespace AssetBundles
 				// If downloading fails.
 				if (download.error != null)
 				{
-					m_DownloadingErrors.Add(keyValue.Key, string.Format("Failed downloading bundle {0} from {1}: {2}", keyValue.Key, download.url, download.error));
+#if ENABLE_NDINFRA_CUSTOM
+					if (!m_DownloadingErrors.ContainsKey(keyValue.Key))
+#endif // #if ENABLE_NDINFRA_CUSTOM
+					{
+						m_DownloadingErrors.Add(keyValue.Key, string.Format("Failed downloading bundle {0} from {1}: {2}", keyValue.Key, download.url, download.error));
+					}
+
 					keysToRemove.Add(keyValue.Key);
 					continue;
 				}
@@ -627,7 +639,12 @@ namespace AssetBundles
 					AssetBundle bundle = download.assetBundle;
 					if (bundle == null)
 					{
-						m_DownloadingErrors.Add(keyValue.Key, string.Format("{0} is not a valid asset bundle.", keyValue.Key));
+#if ENABLE_NDINFRA_CUSTOM
+						if (!m_DownloadingErrors.ContainsKey(keyValue.Key))
+#endif // #if ENABLE_NDINFRA_CUSTOM
+						{
+							m_DownloadingErrors.Add(keyValue.Key, string.Format("{0} is not a valid asset bundle.", keyValue.Key));
+						}
 						keysToRemove.Add(keyValue.Key);
 						continue;
 					}
@@ -637,13 +654,19 @@ namespace AssetBundles
 					string shortKey = keyValue.Key ;
 #if ENABLE_NDINFRA_CUSTOM
 					shortKey = RemovePostVariant(keyValue.Key) ;
-#endif 
-					m_LoadedAssetBundles.Add(shortKey, 
-					new LoadedAssetBundle(download.assetBundle 
+
+					if (!m_LoadedAssetBundles.ContainsKey(keyValue.Key))
+#endif
+					{
+						m_LoadedAssetBundles.Add(shortKey,
+											new LoadedAssetBundle(download.assetBundle
 #if ENABLE_NDINFRA_CUSTOM
 							, shortKey
 #endif // ENABLE_NDINFRA_CUSTOM
 					) );
+
+					}
+
 
 					keysToRemove.Add(keyValue.Key);
 				}
@@ -652,9 +675,14 @@ namespace AssetBundles
 			// Remove the finished WWWs.
 			foreach( var key in keysToRemove)
 			{
-				WWW download = m_DownloadingWWWs[key];
-				m_DownloadingWWWs.Remove(key);
-				download.Dispose();
+#if ENABLE_NDINFRA_CUSTOM
+				if (m_DownloadingWWWs.ContainsKey(key))
+#endif // #if ENABLE_NDINFRA_CUSTOM
+				{
+					WWW download = m_DownloadingWWWs[key];
+					m_DownloadingWWWs.Remove(key);
+					download.Dispose();
+				}
 			}
 	
 			// Update all in progress operations
