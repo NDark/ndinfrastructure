@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2020 NDark
+Copyright (c) 2017 - 2021 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -82,6 +82,20 @@ public class NGUIUICollector {
 				m_Sprites[ sprite.name ] = sprite  ;
 			}
 		}
+
+		m_Buttons.Clear();
+		UIButton[] buttons = m_Obj.GetComponentsInChildren<UIButton>();
+		foreach (UIButton button in buttons)
+		{
+			if (false == m_Buttons.ContainsKey(button.name))
+			{
+				m_Buttons.Add(button.name, button);
+			}
+			else
+			{
+				m_Buttons[button.name] = button;
+			}
+		}
 	}
 	
 	public UISprite GetSprite( string _Key )
@@ -96,6 +110,20 @@ public class NGUIUICollector {
 			ret = m_Sprites[ _Key ] ;
 		}
 		return ret ;
+	}
+
+	public UIButton GetButton(string _Key)
+	{
+		UIButton ret = null;
+		if (false == m_Buttons.ContainsKey(_Key))
+		{
+			Debug.LogWarning("GetButton() _Key doesn't exist _Key=" + _Key);
+		}
+		else
+		{
+			ret = m_Buttons[_Key];
+		}
+		return ret;
 	}
 
 	public UILabel GetFirstLabel( string _Key )
@@ -136,7 +164,7 @@ public class NGUIUICollector {
 		List<UILabel> labels = GetLabels( _Key ) ;
 		if( null == labels )
 		{
-			Debug.LogWarning("null == labels");
+			Debug.LogWarning("null == labels" + _Key);
 			return ;
 		}
 		
@@ -161,4 +189,5 @@ public class NGUIUICollector {
 	protected GameObject m_Obj = null ;
 	protected Dictionary<string , List<UILabel> > m_Labels = new Dictionary<string, List<UILabel>>() ;
 	protected Dictionary<string , UISprite > m_Sprites = new Dictionary<string, UISprite>() ;
+	protected Dictionary<string, UIButton> m_Buttons = new Dictionary<string, UIButton>();
 }

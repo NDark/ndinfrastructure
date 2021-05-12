@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2020 NDark
+Copyright (c) 2017 - 2021 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,10 @@ using UnityEngine;
 
 public class NGUIMessageQueueControllerBase : MonoBehaviour 
 {
+	public void ClearQueue()
+	{
+		m_MessageQueue.Clear();
+	}
 
 	public virtual string CurrentText
 	{

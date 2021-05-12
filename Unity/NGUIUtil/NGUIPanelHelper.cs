@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2020 NDark
+Copyright (c) 2017 - 2021 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -80,7 +80,44 @@ public class NGUIPanelHelper : MonoBehaviour
 
 	public void SetupCloseButton( string _Path )
 	{
-		m_CloseButton = UnityFind.ComponentFind<UIButton>( this.transform , _Path ) ;
+		var trans = this.transform.Find(_Path);
+		if (null == trans)
+		{
+			Debug.LogError("SetupCloseButton() null == trans _Path=" + _Path);
+			return;
+		}
+
+		var c = trans.gameObject.GetComponent<UIButton>();
+		if (null == c)
+		{
+			Debug.LogError("SetupCloseButton() null == component _Path=" + _Path);
+			return;
+		}
+		m_CloseButton = c;
+
+	}
+
+	public void CheckEnoughScrollViewListItems(
+		List<NGUIUICollector> inputList
+		, int dataCount 
+		, GameObject parent 
+		, GameObject prefab 
+		
+		)
+	{
+		for (int i = 0; i < dataCount; ++i)
+		{
+			if (i >= inputList.Count)
+			{
+				GameObject addObj = NGUITools.AddChild(parent, prefab);
+				if (null != addObj)
+				{
+					NGUIUICollector collector = new NGUIUICollector();
+					collector.SetupObj(addObj);
+					inputList.Add(collector);
+				}
+			}
+		}
 	}
 
 	NGUIUICollector m_UIs = new NGUIUICollector() ;
