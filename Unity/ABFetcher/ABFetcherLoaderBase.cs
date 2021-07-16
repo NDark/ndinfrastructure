@@ -86,6 +86,17 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 	{
 		return AssetBundles.AssetBundleManager.IsAssetBundleManifestNotNull() ;
 	}
+
+	public void TryDestroyManager()
+	{
+		if (null != AssetBundles.AssetBundleManager.s_AssetBundleManagerObj)
+		{
+			s_OnceRequestReceived = false;
+			m_InitRequest = null;
+			GameObject.DestroyImmediate(AssetBundles.AssetBundleManager.s_AssetBundleManagerObj);
+			Debug.LogWarning("TryDestroyManager");
+		}
+	}
 #endif //
 	
 	IEnumerator Start ()
@@ -113,7 +124,7 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 #if ENABLE_NDINFRA_ONE_BUNDLE
 			StartCoroutine( LoadOneBundle_Delegate( _Key ) ) ;
 #else 
-			Debug.LogError("Not suppurt this method.");
+			Debug.LogError("[ENABLE_NDINFRA_ONE_BUNDLE] Not suppurt this method.");
 #endif
 		}
 	}
