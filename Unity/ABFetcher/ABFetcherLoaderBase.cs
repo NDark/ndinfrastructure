@@ -93,6 +93,7 @@ public class ABFetcherLoaderBase : AssetBundles.LoaderExample
 		{
 			s_OnceRequestReceived = false;
 			m_InitRequest = null;
+			AssetBundles.AssetBundleManager.AssetBundleManifestObject = null;
 			GameObject.DestroyImmediate(AssetBundles.AssetBundleManager.s_AssetBundleManagerObj);
 			Debug.LogWarning("TryDestroyManager");
 		}
