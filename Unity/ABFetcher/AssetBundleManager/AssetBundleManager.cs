@@ -518,6 +518,8 @@ namespace AssetBundles
 			if (isLoadingAssetBundleManifest)
 			{ 
 				download = UnityWebRequest.Get(url);
+				DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(download.url,0);
+				download.downloadHandler = handler ;
 			}
 			else 
 			{ 
