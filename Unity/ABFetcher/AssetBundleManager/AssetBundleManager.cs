@@ -85,8 +85,9 @@ namespace AssetBundles
 		static Dictionary<string, string> m_DownloadingErrors = new Dictionary<string, string> ();
 		static List<AssetBundleLoadOperation> m_InProgressOperations = new List<AssetBundleLoadOperation> ();
 		static Dictionary<string, string[]> m_Dependencies = new Dictionary<string, string[]> ();
-		
+
 #if ENABLE_NDINFRA_CUSTOM
+		public static GameObject s_AssetBundleManagerObj = null;
 		// bundles which save in local folder: StreamingAssets.
 		static public Dictionary<string /*bundle key*/, int/*version*/> m_LocalBundleTable = new Dictionary<string, int>() ;
 
@@ -300,6 +301,7 @@ namespace AssetBundles
 	#endif
 	
 			var go = new GameObject("AssetBundleManager", typeof(AssetBundleManager));
+			s_AssetBundleManagerObj = go;
 			DontDestroyOnLoad(go);
 		
 	#if UNITY_EDITOR	
