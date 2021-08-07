@@ -6,6 +6,8 @@
 
 // #define ENABLE_NDINFRA_NO_LOG
 
+// #define ENABLE_NDINFRA_USE_WEB_REQUEST
+
 using UnityEngine;
 #if UNITY_EDITOR	
 using UnityEditor;
@@ -13,6 +15,9 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
+#if ENABLE_NDINFRA_USE_WEB_REQUEST
+using UnityEngine.Networking;
+#endif 
 /*
  	In this demo, we demonstrate:
 	1.	Automatic asset bundle dependency resolving & loading.
@@ -72,7 +77,11 @@ namespace AssetBundles
 
 		// the key is bundle key without variant extension
 		static Dictionary<string, LoadedAssetBundle> m_LoadedAssetBundles = new Dictionary<string, LoadedAssetBundle> ();
+#if ENABLE_NDINFRA_USE_WEB_REQUEST
+		static Dictionary<string, UnityEngine.Networking.UnityWebRequest> m_DownloadingWWWs = new Dictionary<string, UnityWebRequest> ();
+#else 
 		static Dictionary<string, WWW> m_DownloadingWWWs = new Dictionary<string, WWW> ();
+#endif  // #if ENABLE_NDINFRA_USE_WEB_REQUEST
 		static Dictionary<string, string> m_DownloadingErrors = new Dictionary<string, string> ();
 		static List<AssetBundleLoadOperation> m_InProgressOperations = new List<AssetBundleLoadOperation> ();
 		static Dictionary<string, string[]> m_Dependencies = new Dictionary<string, string[]> ();
@@ -434,8 +443,11 @@ namespace AssetBundles
 			// But in the real case, users can call LoadAssetAsync()/LoadLevelAsync() several times then wait them to be finished which might have duplicate WWWs.
 			if (m_DownloadingWWWs.ContainsKey(assetBundleName) )
 				return true;
-	
+#if ENABLE_NDINFRA_USE_WEB_REQUEST
+			UnityWebRequest download = null;
+#else 
 			WWW download = null;
+#endif 
 			string url = m_BaseDownloadingURL + assetBundleName;
 
 #if ENABLE_NDINFRA_CUSTOM
@@ -476,8 +488,19 @@ namespace AssetBundles
 
 			if( m_EnableVersionCheck && isVersionExist )
 			{
+#if ENABLE_NDINFRA_USE_WEB_REQUEST
+				download = UnityWebRequest.Get(url);
+				DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(download.url,(uint)targetVersion,0);
+				download.downloadHandler = handler ;
+				CustomCertificateHandler certHandler = new CustomCertificateHandler();
+				download.certificateHandler = certHandler;
+				download.timeout = 10;
+				download.SendWebRequest() ;
+				
+#else 
 				// url was used here
 				download = WWW.LoadFromCacheOrDownload( url , targetVersion ) ;
+#endif 
 			}
 			else
 			{
@@ -489,11 +512,28 @@ namespace AssetBundles
 #endif // ENABLE_NDINFRA_CUSTOM
 
 			// For manifest assetbundle, always download it as we don't have hash for it.
+#if ENABLE_NDINFRA_USE_WEB_REQUEST
+			if (isLoadingAssetBundleManifest)
+			{ 
+				download = UnityWebRequest.Get(url);
+			}
+			else 
+			{ 
+				// use hash
+				download = UnityWebRequest.Get(url);
+				DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(download.url,m_AssetBundleManifest.GetAssetBundleHash(assetBundleName),0);
+				download.downloadHandler = handler ;
+			}
+			CustomCertificateHandler certHandler = new CustomCertificateHandler();
+			download.certificateHandler = certHandler;
+			download.timeout = 10;
+			download.SendWebRequest() ;
+#else 
 			if (isLoadingAssetBundleManifest)
 				download = new WWW(url);
 			else
 				download = WWW.LoadFromCacheOrDownload(url, m_AssetBundleManifest.GetAssetBundleHash(assetBundleName), 0); 
-
+#endif 
 #if ENABLE_NDINFRA_CUSTOM				
 			}				
 #endif 	// ENABLE_NDINFRA_CUSTOM
@@ -617,7 +657,7 @@ namespace AssetBundles
 			var keysToRemove = new List<string>();
 			foreach (var keyValue in m_DownloadingWWWs)
 			{
-				WWW download = keyValue.Value;
+				var download = keyValue.Value;
 	
 				// If downloading fails.
 				if (download.error != null)
@@ -636,7 +676,13 @@ namespace AssetBundles
 				// If downloading succeeds.
 				if(download.isDone)
 				{
+#if ENABLE_NDINFRA_USE_WEB_REQUEST
+					var handler = download.downloadHandler as DownloadHandlerAssetBundle ;
+					AssetBundle bundle = handler.assetBundle;
+					
+#else 
 					AssetBundle bundle = download.assetBundle;
+#endif 
 					if (bundle == null)
 					{
 #if ENABLE_NDINFRA_CUSTOM
@@ -659,7 +705,7 @@ namespace AssetBundles
 #endif
 					{
 						m_LoadedAssetBundles.Add(shortKey,
-											new LoadedAssetBundle(download.assetBundle
+											new LoadedAssetBundle(bundle
 #if ENABLE_NDINFRA_CUSTOM
 							, shortKey
 #endif // ENABLE_NDINFRA_CUSTOM
@@ -679,7 +725,7 @@ namespace AssetBundles
 				if (m_DownloadingWWWs.ContainsKey(key))
 #endif // #if ENABLE_NDINFRA_CUSTOM
 				{
-					WWW download = m_DownloadingWWWs[key];
+					var download = m_DownloadingWWWs[key];
 					m_DownloadingWWWs.Remove(key);
 					download.Dispose();
 				}
@@ -800,4 +846,22 @@ namespace AssetBundles
 			return operation;
 		}
 	} // End of AssetBundleManager.
+
+#if ENABLE_NDINFRA_USE_WEB_REQUEST
+	public class ABHTTPsCertificateHandler : UnityEngine.Networking.CertificateHandler
+	{
+		// Encoded RSAPublicKey
+		// private static readonly string PUB_KEY = "";
+
+		/// <summary>
+		/// Validate the Certificate Against the Amazon public Cert
+		/// </summary>
+		/// <param name="certificateData">Certifcate to validate</param>
+		/// <returns></returns>
+		protected override bool ValidateCertificate(byte[] certificateData)
+		{
+			return true;
+		}
+	}
+#endif // ENABLE_NDINFRA_USE_WEB_REQUEST
 }
