@@ -64,7 +64,7 @@ public class WaitDisableGameObject : MonoBehaviour
 		}
 	}
 	
-	void SetupTime() 
+	public void SetupTime() 
 	{
 		m_CheckTime = Time.time + this.WaitSec;
 	}
