@@ -7,12 +7,15 @@ public class TryCatchPerformanceManager : MonoBehaviour
 	public bool m_IsLog = true;
 	public bool m_IsTrigger = false;
 	public bool m_IsDestroy = true;
-	public UnityEngine.UI.Text m_Text = null; 
+	public UnityEngine.UI.Text m_DebugText = null;
+	public UnityEngine.UI.Text m_BrokenText = null; 
 	public GameObject m_Prefab = null;
 
 	public void SwitchTrigger()
 	{
 		m_IsTrigger = !m_IsTrigger;
+		Debug.Log("m_IsTrigger" + m_IsTrigger);
+		m_DebugText.text = "m_IsTrigger" + m_IsTrigger;
 	}
 
     // Start is called before the first frame update
@@ -43,7 +46,7 @@ public class TryCatchPerformanceManager : MonoBehaviour
 
 			if (m_IsTrigger)
 			{
-				m_Text.text = objs.Count.ToString();
+				m_BrokenText.text = objs.Count.ToString();
 			}
 
 		}
@@ -51,7 +54,7 @@ public class TryCatchPerformanceManager : MonoBehaviour
 		{
 			if (m_IsLog)
 			{
-				Debug.LogWarning(e.ToString());
+				// Debug.LogWarning(e.ToString());
 			}
 		}
 
