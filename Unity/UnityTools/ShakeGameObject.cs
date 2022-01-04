@@ -41,14 +41,13 @@ public class ShakeGameObject : MonoBehaviour
 
 	public void Active()
 	{
-		m_ShakerTimer.Active(true);
-		m_ShakerTimer.IntervalSec = ShakeSec;
-		m_ShakerTimer.Rewind(Time.time);
+		m_ShakerTimer.Active = true;
+		m_ShakerTimer.Rewind(Time.time, ShakeSec);
 	}
 
 	public void Reset()
 	{
-		m_ShakerTimer.Active(false);
+		m_ShakerTimer.Active = false ;
 		this.Init();	
 	}
 
@@ -59,7 +58,7 @@ public class ShakeGameObject : MonoBehaviour
 
 	void Awake() 
 	{
-		m_ShakerTimer.Active(false);
+		m_ShakerTimer.Active = false;
 	}
 
 	// Use this for initialization
@@ -71,7 +70,7 @@ public class ShakeGameObject : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (m_ShakerTimer.IsActive )
+		if (m_ShakerTimer.Active )
 		{
 			if (m_ShakerTimer.IsReady(Time.time))
 			{
@@ -96,6 +95,24 @@ public class ShakeGameObject : MonoBehaviour
 	}
 
 	Vector3 orgLocalPos = Vector3.zero ;
-	CountDownTimer m_ShakerTimer = new CountDownTimer() ;
+	SimpleTimer m_ShakerTimer = new SimpleTimer() ;
+
+
+	public class SimpleTimer
+	{
+		public bool Active { get; set; }
+
+		public void Rewind(float _NowTime , float intervalSec )
+		{
+			m_NextTime = _NowTime + intervalSec;
+		}
+
+		public bool IsReady(float _NowTime)
+		{
+			return (_NowTime > m_NextTime);
+		}
+
+		float m_NextTime = 0.0f;
+	}
 
 }
