@@ -301,7 +301,11 @@ namespace AssetBundles
 	#endif
 	
 			var go = new GameObject("AssetBundleManager", typeof(AssetBundleManager));
+
+#if ENABLE_NDINFRA_CUSTOM
 			s_AssetBundleManagerObj = go;
+#endif // ENABLE_NDINFRA_CUSTOM
+
 			DontDestroyOnLoad(go);
 		
 	#if UNITY_EDITOR	
