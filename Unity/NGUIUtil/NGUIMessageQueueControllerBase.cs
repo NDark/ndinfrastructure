@@ -22,6 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+@date 20230425 by NDark add onUpdateMessageQueue
+
 */
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +31,8 @@ using UnityEngine;
 
 public class NGUIMessageQueueControllerBase : MonoBehaviour 
 {
+	public System.Action onUpdateMessageQueue = new System.Action(()=>{ }) ;
+
 	public void ClearQueue()
 	{
 		m_MessageQueue.Clear();
@@ -61,6 +65,7 @@ public class NGUIMessageQueueControllerBase : MonoBehaviour
 	public void QueueText( string _Text )
 	{
 		m_MessageQueue.AddLast( _Text ) ;
+		onUpdateMessageQueue();
 	}
 
 
@@ -93,6 +98,7 @@ public class NGUIMessageQueueControllerBase : MonoBehaviour
 		{
 			RestartAnimation(m_MessageQueue.First.Value) ;
 			m_MessageQueue.RemoveFirst() ;
+			onUpdateMessageQueue();
 		}
 	}
 
