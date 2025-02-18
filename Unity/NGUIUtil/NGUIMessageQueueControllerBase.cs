@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 @date 20230425 by NDark add onUpdateMessageQueue
+@date 20250218 by NDark add PeekLastString()
 
 */
 using System.Collections;
@@ -32,6 +33,13 @@ using UnityEngine;
 public class NGUIMessageQueueControllerBase : MonoBehaviour 
 {
 	public System.Action onUpdateMessageQueue = new System.Action(()=>{ }) ;
+
+	public string PeekLastString()
+	{
+		return (m_MessageQueue.Count > 0) 
+			? m_MessageQueue.Last.Value 
+			: string.Empty ;
+	}
 
 	public void ClearQueue()
 	{
