@@ -80,7 +80,11 @@ public class OnClickOpenBrower : MonoBehaviour
 			// Debug.Log( jsCall ) ;
 			Application.ExternalEval( _JSCall );
 		}
-#endif		
+#endif
+		else if( Application.platform == RuntimePlatform.IPhonePlayer )
+		{
+			OpenURL_iOS.OpenURL(m_Url);
+		}
 		else /*if( Application.platform == RuntimePlatform.WindowsPlayer ||
 				 Application.platform == RuntimePlatform.WindowsEditor )*/
 		{
