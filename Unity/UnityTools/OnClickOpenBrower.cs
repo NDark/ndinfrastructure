@@ -32,7 +32,9 @@ SOFTWARE.
 
 https://answers.unity.com/questions/1571701/open-new-window-from-webgll-with-unity-2018.html
 
+@date 20250514 by NDark . add ENABLE_USE_OpenURL_iOS to OpenURL_iOS.OpenURL.
 */
+// #define ENABLE_USE_OpenURL_iOS
 using UnityEngine;
 
 public class OnClickOpenBrower : MonoBehaviour 
@@ -81,10 +83,12 @@ public class OnClickOpenBrower : MonoBehaviour
 			Application.ExternalEval( _JSCall );
 		}
 #endif
-		else if( Application.platform == RuntimePlatform.IPhonePlayer )
+#if ENABLE_USE_OpenURL_iOS
+		else if ( Application.platform == RuntimePlatform.IPhonePlayer )
 		{
 			OpenURL_iOS.OpenURL(m_Url);
 		}
+#endif // ENABLE_USE_OpenURL_iOS
 		else /*if( Application.platform == RuntimePlatform.WindowsPlayer ||
 				 Application.platform == RuntimePlatform.WindowsEditor )*/
 		{
