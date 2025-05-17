@@ -29,10 +29,10 @@ SOFTWARE.
 @date 20170501 . file started.
 @date 20170620 by NDark
 . add class method OpenBrowerWithSpecifiedTabName(), OpenBrowerNewTab(), OpenBrowerAtSelf(), RefreshBrower()
-
 https://answers.unity.com/questions/1571701/open-new-window-from-webgll-with-unity-2018.html
-
 @date 20250514 by NDark . add ENABLE_USE_OpenURL_iOS to OpenURL_iOS.OpenURL.
+https://discussions.unity.com/t/application-openurl-doesnt-work-on-ios-18/1553960/15
+
 */
 // #define ENABLE_USE_OpenURL_iOS
 using UnityEngine;
