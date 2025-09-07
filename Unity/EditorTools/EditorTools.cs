@@ -27,6 +27,7 @@ SOFTWARE.
 @file EditorTools.cs
 @author NDark
 @date 20170509 . file started.
+@date 20250907 . support WebGL and Unity 2022.
 
 */
 using UnityEngine;
@@ -35,11 +36,15 @@ public static partial class EditorTools
 {
 	public static void CachingCleanCache()
 	{
-		#if UNITY_2017_1_OR_NEWER
+#if UNITY_2022_1_OR_NEWER && UNITY_WEBGL
+		Debug.LogWarning("EditorTools::CachingCleanCache() not support platform.");
+		return ;
+#else // UNITY_2022_OR_NEWER && UNITY_WEBGL
+#if UNITY_2017_1_OR_NEWER                      
 		if( Caching.ClearCache () )
-		#else
+#else
 		if( Caching.CleanCache () )
-		#endif 
+#endif
 		{
 			Debug.Log("EditorTools::CachingCleanCache() succeed.");
 		}
@@ -47,6 +52,8 @@ public static partial class EditorTools
 		{
 			Debug.LogWarning("EditorTools::CachingCleanCache() failed.");
 		}
+#endif // UNITY_2022_OR_NEWER && UNITY_WEBGL
+
 	}
 
 	public static void PlayerPrefsDeleteAll()
