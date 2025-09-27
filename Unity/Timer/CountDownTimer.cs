@@ -39,6 +39,7 @@ SOFTWARE.
 . add class method Postpone().
 @date 20250927 by NDark
 . add SetNextTimeNow()
+. add SetNextTimeThisFrame()
 
 */
 
@@ -67,7 +68,12 @@ public class CountDownTimer
 		m_NextTime = _NowTime + m_IntervalSec;
 	}
 
-	public void SetNextTimeNow(float _NowTime)
+	public void SetNextTimeThisFrame(float _NowTime)
+	{
+		this.SetNextTime(_NowTime-0.1f);// Make sure is ready this frame
+	}
+
+	public void SetNextTime(float _NowTime)
 	{
 		m_NextTime = _NowTime;
 	}
