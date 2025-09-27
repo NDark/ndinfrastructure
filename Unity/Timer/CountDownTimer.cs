@@ -37,7 +37,8 @@ SOFTWARE.
 @date 20170717 by NDark 
 . add constructor.
 . add class method Postpone().
-
+@date 20250927 by NDark
+. add SetNextTimeNow()
 
 */
 
@@ -64,6 +65,11 @@ public class CountDownTimer
 	public void Rewind( float _NowTime )
 	{
 		m_NextTime = _NowTime + m_IntervalSec;
+	}
+
+	public void SetNextTimeNow(float _NowTime)
+	{
+		m_NextTime = _NowTime;
 	}
 
 	public void Postpone( float _Sec )
