@@ -83,6 +83,26 @@ public class StateIndexExample2 : MonoBehaviour
 
 		Dictionary<ExampleState, StateIndexBase<ExampleState>.AllowTransitionData > allowedTransitionData = new Dictionary<ExampleState, StateIndexBase<ExampleState>.AllowTransitionData>();
 
+		{ 
+			var allowed = new StateIndexBase<ExampleState>.AllowTransitionData();
+			allowed.SourceState = ExampleState.Init;
+			allowed.AllowTargetStates.Add(ExampleState.Check);
+			allowedTransitionData.Add(ExampleState.Init, allowed);
+		}
+		{
+			var allowed = new StateIndexBase<ExampleState>.AllowTransitionData();
+			allowed.SourceState = ExampleState.Check;
+			allowed.AllowTargetStates.Add(ExampleState.Wait);
+			allowedTransitionData.Add(ExampleState.Check, allowed);
+		}
+		{
+			var allowed = new StateIndexBase<ExampleState>.AllowTransitionData();
+			allowed.SourceState = ExampleState.Wait;
+			allowed.AllowTargetStates.Add(ExampleState.End);
+			allowedTransitionData.Add(ExampleState.Wait, allowed);
+		}
+
+
 		m_State.CallInit( ExampleState.Init , transitions , allowedTransitionData ) ;
 
 		StartCoroutine( StartSimulateChangeState() ) ;
