@@ -28,6 +28,7 @@ SOFTWARE.
 @author NDark
 @date 20231115. file started.
 @date 20250830. add m_MacOSStoreObj.
+@date 20251003 . add condition for more compatibility.
 
 */
 using System.Collections;
@@ -63,7 +64,11 @@ public class SwitchOpenPlatform : MonoBehaviour
             {
                 ++validCount;
             }
-            platform.Value?.SetActive(isShow);
+
+			if (null != platform.Value) 
+			{
+				platform.Value.SetActive(isShow); 
+			}
         }
 
 
@@ -74,7 +79,10 @@ public class SwitchOpenPlatform : MonoBehaviour
             )
         {
             Debug.LogWarning("SwitchOpenPlatform::SwitchObject() Application.isEditor");
-            m_SwitchingObjects[RuntimePlatform.Android]?.SetActive(true);
+			if(null!= m_SwitchingObjects[RuntimePlatform.Android])
+			{
+				m_SwitchingObjects[RuntimePlatform.Android].SetActive(true);
+			}
         }
 #endif 
 
