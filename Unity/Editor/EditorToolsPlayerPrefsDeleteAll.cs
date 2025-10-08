@@ -23,10 +23,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
-/**
-@file EditorTools.cs
-@author NDark
-@date 20170509 . file started.
-@date 20250907 . support WebGL and Unity 2022.
-@date 20251008 . move file to under folder Editor.
-*/
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EditorToolsPlayerPrefsDeleteAll : MonoBehaviour 
+{
+	public void PlayerPrefsDeleteAll()
+	{
+		EditorTools.PlayerPrefsDeleteAll() ;
+	}
+
+
+}
