@@ -50,7 +50,7 @@ public static partial class EditorTools
 		var allFiles = System.IO.Directory.GetFiles(sourceDirectory);
 		
 
-		string assetsBundleDir = Path.Combine(UnityEngine.Application.streamingAssetsPath, "AssetBundles2/" + AssetBundles.Utility.GetPlatformName());
+		string assetsBundleDir = Path.Combine(UnityEngine.Application.streamingAssetsPath, "AssetBundles/" + AssetBundles.Utility.GetPlatformName());
 		if (!Directory.Exists(assetsBundleDir))
 			Directory.CreateDirectory(assetsBundleDir);
 
