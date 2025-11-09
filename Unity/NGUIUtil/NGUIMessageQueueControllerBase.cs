@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2021 NDark
+Copyright (c) 2017 - 2025 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+@date 20230425 by NDark add onUpdateMessageQueue
+@date 20250218 by NDark add PeekLastString()
+
 */
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +32,15 @@ using UnityEngine;
 
 public class NGUIMessageQueueControllerBase : MonoBehaviour 
 {
+	public System.Action onUpdateMessageQueue = new System.Action(()=>{ }) ;
+
+	public string PeekLastString()
+	{
+		return (m_MessageQueue.Count > 0) 
+			? m_MessageQueue.Last.Value 
+			: string.Empty ;
+	}
+
 	public void ClearQueue()
 	{
 		m_MessageQueue.Clear();
@@ -61,6 +73,7 @@ public class NGUIMessageQueueControllerBase : MonoBehaviour
 	public void QueueText( string _Text )
 	{
 		m_MessageQueue.AddLast( _Text ) ;
+		onUpdateMessageQueue();
 	}
 
 
@@ -93,6 +106,7 @@ public class NGUIMessageQueueControllerBase : MonoBehaviour
 		{
 			RestartAnimation(m_MessageQueue.First.Value) ;
 			m_MessageQueue.RemoveFirst() ;
+			onUpdateMessageQueue();
 		}
 	}
 
