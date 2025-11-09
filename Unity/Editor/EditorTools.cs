@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2021 NDark
+Copyright (c) 2017 - 2025 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,3 +30,38 @@ SOFTWARE.
 @date 20250907 . support WebGL and Unity 2022.
 @date 20251008 . move file to under folder Editor.
 */
+using UnityEngine;
+
+public static partial class EditorTools
+{
+	public static void CachingCleanCache()
+	{
+#if UNITY_2022_1_OR_NEWER && UNITY_WEBGL
+		Debug.LogWarning("EditorTools::CachingCleanCache() not support platform.");
+		return ;
+#else // UNITY_2022_OR_NEWER && UNITY_WEBGL
+#if UNITY_2017_1_OR_NEWER
+		if (Caching.ClearCache())
+#else
+		if( Caching.CleanCache () )
+#endif
+		{
+			Debug.Log("EditorTools::CachingCleanCache() succeed.");
+		}
+		else
+		{
+			Debug.LogWarning("EditorTools::CachingCleanCache() failed.");
+		}
+#endif // UNITY_2022_OR_NEWER && UNITY_WEBGL
+
+	}
+
+	public static void PlayerPrefsDeleteAll()
+	{
+		Debug.LogWarning("EditorTools::PlayerPrefsDeleteAll() remember this just remove PlayerPrefs of editor platform.");
+		PlayerPrefs.DeleteAll();
+		PlayerPrefs.Save();
+
+	}
+
+}

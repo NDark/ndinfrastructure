@@ -23,19 +23,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
-using UnityEngine;
-using System.Collections;
-
-public class EditorToolsCachingCleanCache : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () 
-	{
-		EditorTools.CachingCleanCache() ;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-}

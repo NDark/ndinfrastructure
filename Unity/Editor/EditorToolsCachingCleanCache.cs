@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2021 NDark
+Copyright (c) 2017 - 2025 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
-/**
-@file EditorTools.cs
-@author NDark
-@date 20170509 . file started.
-@date 20250907 . support WebGL and Unity 2022.
-@date 20251008 . move file to under folder Editor.
-*/
+using UnityEngine;
+using System.Collections;
+
+public class EditorToolsCachingCleanCache : MonoBehaviour {
+
+	// Use this for initialization
+	void Start () 
+	{
+		EditorTools.CachingCleanCache() ;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+}
