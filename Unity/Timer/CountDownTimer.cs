@@ -42,6 +42,7 @@ SOFTWARE.
 . add SetNextTimeThisFrame()
 @date 20251101 by NDark 
 . add almostSec in SetNextTimeThisFrame()
+. rename SetNextTimeThisFrame() to FastforwardToNextTime()
 
 */
 
@@ -70,9 +71,21 @@ public class CountDownTimer
 		m_NextTime = _NowTime + m_IntervalSec;
 	}
 
-	public void SetNextTimeThisFrame(float _NowTime , float almostSec )
+	/// <summary>
+	/// fastforward not time to next time(set next time to earlier than now)
+	/// with a small earllier value (make sure Ready() happens this frame, not next frame.)
+	/// </summary>
+	/// <param name="_NowTime"></param>
+	/// <param name="almostSec"></param>
+	public void FastforwardToNextTime(float _NowTime , float almostSec )
 	{
 		this.SetNextTime(_NowTime - almostSec);// Make sure is ready this frame
+	}
+	public void FastforwardToNextTime(float _NowTime)
+	{
+		this.FastforwardToNextTime(_NowTime 
+			, (-1 * float.MinValue) // a small positive value
+			) ; 
 	}
 
 	public void SetNextTime(float _NowTime)
