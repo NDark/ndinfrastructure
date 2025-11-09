@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 - 2021 NDark
+Copyright (c) 2017 - 2025 NDark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+/**
+@20250928 by NDark
+. add AllowTransitionData
+@20250929 by NDark 
+. add onCallChangeState, onChangedState.
+
+ */
 using System.Collections;
 using System.Collections.Generic;
 
 public class StateIndexBase<T>
 {
+	public System.Action<T, T> onCallChangeState = new System.Action<T, T>((p, n) => { });
+	public System.Action<T,T> onChangedState = new System.Action<T,T>((p,n) => { });
+
 	public StateIndexBase()
 	{
 	}
@@ -41,6 +51,16 @@ public class StateIndexBase<T>
 	{
 		m_NextValue = m_CurrentValue = m_PreviousValue = _InitState ;
 		m_Transitions = _Transitions ;
+	}
+
+	public virtual void CallInit(T _InitState
+		, Dictionary<T, TransitionSet> _Transitions
+		, Dictionary<T, AllowTransitionData> _AllowTransition
+		)
+	{
+		m_NextValue = m_CurrentValue = m_PreviousValue = _InitState;
+		m_Transitions = _Transitions;
+		m_AllowTransitions = _AllowTransition ;
 	}
 
 	public virtual void TryAddTransitionSet( T _State , TransitionSet _Set )
@@ -57,7 +77,7 @@ public class StateIndexBase<T>
 
 	public virtual void ChangeState( T _Next , float _TimeNow )
 	{
-		if( m_CurrentValue.Equals( _Next ) )
+		if ( m_CurrentValue.Equals( _Next ) )
 		{
 			return ;
 		}
@@ -65,10 +85,21 @@ public class StateIndexBase<T>
 		{
 			return ;
 		}
+		if( m_AllowTransitions.TryGetValue( m_CurrentValue , out AllowTransitionData allowData ) )
+		{
+			if (null!= allowData)
+			{
+				if( !allowData.AllowTargetStates.Contains(_Next) )
+				{ 
+					// not allowed to transition this way
+					return ;
+				}
+			}
+		}
 		m_NextValue = _Next ;
 		m_IsInTransition = true ;
 		m_ChangeTime = _TimeNow ;
-
+		onCallChangeState(m_CurrentValue, m_NextValue);
 
 	}
 
@@ -93,6 +124,7 @@ public class StateIndexBase<T>
 				currentStateFuncs.OnExit() ;
 			}
 
+			onChangedState(m_CurrentValue , m_NextValue);
 			m_PreviousValue = m_CurrentValue ;
 			m_CurrentValue = m_NextValue ;
 
@@ -129,14 +161,22 @@ public class StateIndexBase<T>
 		return _TimeNow - m_ChangeTime ;
 	}
 
-	bool m_IsInTransition = false ;
+	protected bool m_IsInTransition = false ;
 
-	T m_CurrentValue ;
-	T m_PreviousValue ;
-	T m_NextValue ;
+	protected T m_CurrentValue ;
+	protected T m_PreviousValue ;
+	protected T m_NextValue ;
 
-	Dictionary<T,TransitionSet> m_Transitions = new Dictionary<T, TransitionSet>() ;
-	float m_ChangeTime = 0.0f ;
+	protected Dictionary<T,TransitionSet> m_Transitions = new Dictionary<T, TransitionSet>() ;
+	protected Dictionary<T, AllowTransitionData> m_AllowTransitions = new Dictionary<T, AllowTransitionData>();
+	protected float m_ChangeTime = 0.0f ;
+
+
+	public class AllowTransitionData
+	{
+		public T SourceState ;
+		public List<T> AllowTargetStates = new List<T>();
+	}
 }
 
 public class TransitionSet
@@ -144,4 +184,5 @@ public class TransitionSet
 	public System.Action OnEnter = new System.Action( ()=>{} ) ;
 	public System.Action<float> OnUpdate = new System.Action<float>( (deltaTime)=>{} ) ;
 	public System.Action OnExit = new System.Action( ()=>{} ) ;
+
 }
