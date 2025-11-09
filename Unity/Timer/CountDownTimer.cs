@@ -40,6 +40,8 @@ SOFTWARE.
 @date 20250927 by NDark
 . add SetNextTimeNow()
 . add SetNextTimeThisFrame()
+@date 20251101 by NDark 
+. add almostSec in SetNextTimeThisFrame()
 
 */
 
@@ -68,9 +70,9 @@ public class CountDownTimer
 		m_NextTime = _NowTime + m_IntervalSec;
 	}
 
-	public void SetNextTimeThisFrame(float _NowTime)
+	public void SetNextTimeThisFrame(float _NowTime , float almostSec )
 	{
-		this.SetNextTime(_NowTime-0.1f);// Make sure is ready this frame
+		this.SetNextTime(_NowTime - almostSec);// Make sure is ready this frame
 	}
 
 	public void SetNextTime(float _NowTime)
