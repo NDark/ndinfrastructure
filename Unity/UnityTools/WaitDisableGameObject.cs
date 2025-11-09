@@ -24,30 +24,50 @@ SOFTWARE.
 
 */
 /**
-@file OnEscapeLeaveGame.cs
+@file WaitDisableGameObject.cs
 @author NDark
-@date 20170507 . file started.
+@date 20210530 . file started.
 
 */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnEscapeLeaveGame : MonoBehaviour {
+public class WaitDisableGameObject : MonoBehaviour 
+{
+	public bool IsDestroyAtTheEnd = false;
+	public float WaitSec = 1.0f ;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
 	void Update () 
 	{
-		if( Input.GetKeyUp(KeyCode.Escape) )
+		if( float.MaxValue == m_CheckTime )
 		{
-			// Debug.LogWarning("Application.Quit");
-			Application.Quit() ;
+			if( this.gameObject.activeSelf )
+			{
+				SetupTime() ;
+			}
 		}
-		
+		else
+		{
+			if( Time.time > m_CheckTime )
+			{
+				if (true == IsDestroyAtTheEnd)
+				{
+					GameObject.Destroy(this.gameObject);
+				}
+				else
+				{
+					this.gameObject.SetActive(false);
+				}
+				m_CheckTime = float.MaxValue ;// never check again
+			}
+		}
 	}
+	
+	public void SetupTime() 
+	{
+		m_CheckTime = Time.time + this.WaitSec;
+	}
+	
+	float m_CheckTime = float.MaxValue ;
 }

@@ -24,30 +24,28 @@ SOFTWARE.
 
 */
 /**
-@file OnEscapeLeaveGame.cs
+@file ListControl.cs
 @author NDark
-@date 20170507 . file started.
+@date 20210626 . file started.
 
 */
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class OnEscapeLeaveGame : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () 
+public static class ListControl
+{
+	public static void ShuffleList<T>(ref List<T> list)
 	{
-		if( Input.GetKeyUp(KeyCode.Escape) )
+		int count = list.Count;
+		while (count > 0)
 		{
-			// Debug.LogWarning("Application.Quit");
-			Application.Quit() ;
+			--count;
+			int index = Random.Range(0, count);
+			T value = list[index];
+			list[index] = list[count];
+			list[count] = value;
 		}
-		
 	}
+
 }
+

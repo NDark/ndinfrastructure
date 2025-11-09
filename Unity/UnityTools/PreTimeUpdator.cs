@@ -24,16 +24,42 @@ SOFTWARE.
 
 */
 /**
-@file OnEscapeLeaveGame.cs
+@file PreTimeUpdator.cs
 @author NDark
-@date 20170507 . file started.
+@date 20241018 . file started.
 
 */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnEscapeLeaveGame : MonoBehaviour {
+public class PreTimeUpdator : MonoBehaviour 
+{
+	public bool FlowAsTime = true;
+	public static float TimeTime ;
+	public static float TimeDeltaTime ;
+	public static int FrameCount = 0 ;
+	public static int RecordedTurn = 0 ;
+	public static bool s_FlowAsTime = true;
+
+	public static void CallUpdateOnce()
+	{
+		TimeFlow (Time.deltaTime);
+	}
+
+	public static void TimeFlow( float deltaTime )
+	{
+		PreTimeUpdator.TimeTime += deltaTime;
+		PreTimeUpdator.TimeDeltaTime = deltaTime;
+		++PreTimeUpdator.FrameCount;
+		// Debug.Log("TimeTime=" + TimeTime );
+	}
+
+	void Awake()
+	{
+		PreTimeUpdator.s_FlowAsTime = this.FlowAsTime;
+		PreTimeUpdator.TimeTime = Time.time; // init
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -43,11 +69,14 @@ public class OnEscapeLeaveGame : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if( Input.GetKeyUp(KeyCode.Escape) )
+		if ( this.FlowAsTime && true == PreTimeUpdator.s_FlowAsTime) 
 		{
-			// Debug.LogWarning("Application.Quit");
-			Application.Quit() ;
+			TimeFlow (Time.deltaTime);
+		} 
+		else 
+		{
+			PreTimeUpdator.TimeDeltaTime = 0.0f ;
 		}
-		
 	}
+
 }

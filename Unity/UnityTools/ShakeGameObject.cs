@@ -24,42 +24,95 @@ SOFTWARE.
 
 */
 /**
-@file WaitSecChangeScene.cs
+@file ShakeGameObject.cs
 @author NDark
-@date 20170507 . file started.
+@date 20210530 . file started.
 
 */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaitSecChangeScene : MonoBehaviour 
+public class ShakeGameObject : MonoBehaviour 
 {
-	public string m_SceneName = string.Empty ;
-	public float m_WaitSec = 0.0f ;
-	
-	public void LoadScene()
+	public float ShakeSec = 0.5f ;
+	public float ShakeDistance = 0.1f;
+	public bool IsDestroyAtTheEnd = false;
+
+	public void Active()
 	{
-		UnityEngine.SceneManagement.SceneManager.LoadScene ( m_SceneName );
+		m_ShakerTimer.Active = true;
+		m_ShakerTimer.Rewind(Time.time, ShakeSec);
+	}
+
+	public void Reset()
+	{
+		m_ShakerTimer.Active = false ;
+		this.Init();	
+	}
+
+	public void Init()
+	{
+		this.orgLocalPos = this.transform.localPosition;
+	}
+
+	void Awake() 
+	{
+		m_ShakerTimer.Active = false;
 	}
 
 	// Use this for initialization
 	void Start () 
 	{
-		m_NextTime = Time.time + m_WaitSec ;
-		
+		Init();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if( Time.time > m_NextTime )
+		if (m_ShakerTimer.Active )
 		{
-			LoadScene() ;
-			m_NextTime = float.MaxValue ;
+			if (m_ShakerTimer.IsReady(Time.time))
+			{
+				// stop
+				this.Reset();
+				if (IsDestroyAtTheEnd)
+				{
+					Component.Destroy(this);
+				}
+				return ;
+			}
+
+			ShakeLocalPosition();
 		}
-		
 	}
-	
-	public float m_NextTime = 0.0f ;
+
+	void ShakeLocalPosition()
+	{
+		Vector3 offset = Random.onUnitSphere * this.ShakeDistance;
+		offset.y = 0;// local y
+		this.transform.localPosition = orgLocalPos + offset;
+	}
+
+	Vector3 orgLocalPos = Vector3.zero ;
+	SimpleTimer m_ShakerTimer = new SimpleTimer() ;
+
+
+	public class SimpleTimer
+	{
+		public bool Active { get; set; }
+
+		public void Rewind(float _NowTime , float intervalSec )
+		{
+			m_NextTime = _NowTime + intervalSec;
+		}
+
+		public bool IsReady(float _NowTime)
+		{
+			return (_NowTime > m_NextTime);
+		}
+
+		float m_NextTime = 0.0f;
+	}
+
 }
